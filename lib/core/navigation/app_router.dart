@@ -38,7 +38,10 @@ GoRouter appRouter(AppRouterRef ref) {
                 path: 'session',
                 name: 'session',
                 parentNavigatorKey: _rootNavigatorKey,
-                builder: (context, state) => const LearningSessionScreen(),
+                builder: (context, state) {
+                  final deckId = state.uri.queryParameters['deckId'];
+                  return LearningSessionScreen(deckId: deckId);
+                },
               ),
               GoRoute(
                 path: 'result',

@@ -3,6 +3,7 @@ import '../models/word_card.dart';
 import '../models/deck.dart';
 import '../models/article_card.dart';
 import '../models/sentence_card.dart';
+import '../models/learning_session.dart';
 import '../models/enums.dart';
 import '../repositories/cards_repository.dart';
 import '../repositories/decks_repository.dart';
@@ -91,7 +92,7 @@ final cardsForSessionProvider = FutureProvider.family<List<dynamic>, String>((re
   return repo.getCardsForSession(deckId);
 });
 
-final currentSessionProvider = FutureProvider<LearningSession?>((ref) async {
+final currentSessionDataProvider = FutureProvider<LearningSession?>((ref) async {
   final repo = ref.watch(sessionRepositoryProvider);
   return repo.getCurrentSession();
 });
