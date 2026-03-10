@@ -1,81 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'app_colors.dart';
 
 class AppTypography {
-  AppTypography._();
+  // Font families
+  static const String primaryFont = 'Inter';
+  static const String fallbackFont = 'SF Pro';
 
-  static const double fontSize28 = 28.0;
-  static const double fontSize22 = 22.0;
-  static const double fontSize18 = 18.0;
-  static const double fontSize14 = 14.0;
-  static const double fontSize12 = 12.0;
+  // Title - 28pt
+  static const TextStyle title = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+    height: 1.3,
+  );
 
-  static const double fontWeightLight = FontWeight.w300;
-  static const double fontWeightRegular = FontWeight.w400;
-  static const double fontWeightMedium = FontWeight.w500;
-  static const double fontWeightSemiBold = FontWeight.w600;
-  static const double fontWeightBold = FontWeight.w700;
+  // Section - 22pt
+  static const TextStyle section = TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.4,
+  );
 
-  static const double lineHeightTight = 1.2;
-  static const double lineHeightNormal = 1.5;
-  static const double lineHeightRelaxed = 1.75;
+  // Card title - 18pt
+  static const TextStyle cardTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.4,
+  );
 
-  static String get fontFamily => GoogleFonts.inter().fontFamily ?? 'Inter';
+  // Body - 14pt
+  static const TextStyle body = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
 
-  static TextStyle get displayLarge => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize28,
-        fontWeight: fontWeightBold,
-        height: lineHeightTight,
-      );
+  // Body large - 16pt
+  static const TextStyle bodyLarge = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
 
-  static TextStyle get displayMedium => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize22,
-        fontWeight: fontWeightSemiBold,
-        height: lineHeightTight,
-      );
+  // Caption - 12pt
+  static const TextStyle caption = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textSecondary,
+    height: 1.4,
+  );
 
-  static TextStyle get headline => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize18,
-        fontWeight: fontWeightSemiBold,
-        height: lineHeightNormal,
-      );
+  // Button text
+  static const TextStyle button = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    height: 1.25,
+  );
 
-  static TextStyle get bodyLarge => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize18,
-        fontWeight: fontWeightRegular,
-        height: lineHeightNormal,
-      );
+  // German word (flashcard)
+  static const TextStyle germanWord = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+    height: 1.2,
+  );
 
-  static TextStyle get bodyMedium => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize14,
-        fontWeight: fontWeightRegular,
-        height: lineHeightNormal,
-      );
-
-  static TextStyle get bodySmall => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize12,
-        fontWeight: fontWeightRegular,
-        height: lineHeightRelaxed,
-      );
-
-  static TextStyle get caption => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize12,
-        fontWeight: fontWeightMedium,
-        height: lineHeightRelaxed,
-      );
-
-  static TextStyle get button => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: fontSize14,
-        fontWeight: fontWeightSemiBold,
-        height: lineHeightNormal,
-        letterSpacing: 0.5,
-      );
+  // Translation
+  static const TextStyle translation = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textSecondary,
+    height: 1.4,
+  );
 }

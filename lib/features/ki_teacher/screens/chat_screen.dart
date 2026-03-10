@@ -102,7 +102,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isUser ? AppColors.primary : AppColors.cards,
+          color: isUser ? AppColors.primary : AppColors.surface,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -110,7 +110,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           children: [
             Text(
               message.content,
-              style: AppTypography.bodyMedium.copyWith(
+              style: AppTypography.body.copyWith(
                 color: isUser ? AppColors.surface : AppColors.textPrimary,
               ),
             ),
@@ -151,7 +151,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 controller: _messageController,
                 decoration: InputDecoration(
                   hintText: 'Type a message in German...',
-                  hintStyle: AppTypography.bodyMedium.copyWith(
+                  hintStyle: AppTypography.body.copyWith(
                     color: AppColors.textTertiary,
                   ),
                   filled: true,
