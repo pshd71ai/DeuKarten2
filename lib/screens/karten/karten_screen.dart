@@ -16,7 +16,7 @@ class KartenScreen extends StatelessWidget {
           children: [
             const Text('Deck List Placeholder'),
             ElevatedButton(
-              onPressed: () => context.go('/karten/session'),
+              onPressed: () => context.go('/karten/session?deckId=1'),
               child: const Text('Start Session'),
             ),
           ],

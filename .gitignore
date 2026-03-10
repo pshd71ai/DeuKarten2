@@ -32,9 +32,9 @@ migrate_working_dir/
 .pub/
 /build/
 
-# Freezed and codegen files
-*.freezed.dart
-*.g.dart
+# Freezed and codegen files - usually ignored but included for this implementation
+# *.freezed.dart
+# *.g.dart
 
 # Symbolication related
 app.*.symbols
