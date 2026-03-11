@@ -6,6 +6,8 @@ final chatMessagesProvider =
   return ChatMessagesNotifier();
 });
 
+final isAiTypingProvider = StateProvider<bool>((ref) => false);
+
 class ChatMessagesNotifier extends StateNotifier<List<ChatMessageModel>> {
   ChatMessagesNotifier() : super(_sampleMessages);
 

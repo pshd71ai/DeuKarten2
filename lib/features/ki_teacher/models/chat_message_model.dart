@@ -4,12 +4,20 @@ enum ChatMessageRole {
   system,
 }
 
+enum ChatMessageType {
+  text,
+  grammar,
+  correction,
+  suggestions,
+}
+
 class ChatMessageModel {
   final String id;
   final String content;
   final ChatMessageRole role;
   final DateTime timestamp;
   final String? language;
+  final ChatMessageType type;
 
   ChatMessageModel({
     required this.id,
@@ -17,6 +25,7 @@ class ChatMessageModel {
     required this.role,
     required this.timestamp,
     this.language,
+    this.type = ChatMessageType.text,
   });
 
   ChatMessageModel copyWith({
@@ -25,6 +34,7 @@ class ChatMessageModel {
     ChatMessageRole? role,
     DateTime? timestamp,
     String? language,
+    ChatMessageType? type,
   }) {
     return ChatMessageModel(
       id: id ?? this.id,
@@ -32,6 +42,7 @@ class ChatMessageModel {
       role: role ?? this.role,
       timestamp: timestamp ?? this.timestamp,
       language: language ?? this.language,
+      type: type ?? this.type,
     );
   }
 
@@ -42,6 +53,7 @@ class ChatMessageModel {
       'role': role.name,
       'timestamp': timestamp.toIso8601String(),
       'language': language,
+      'type': type.name,
     };
   }
 
@@ -55,6 +67,10 @@ class ChatMessageModel {
       ),
       timestamp: DateTime.parse(json['timestamp'] as String),
       language: json['language'] as String?,
+      type: ChatMessageType.values.firstWhere(
+        (e) => e.name == json['type'],
+        orElse: () => ChatMessageType.text,
+      ),
     );
   }
 
