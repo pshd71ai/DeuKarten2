@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../providers/ki_teacher_providers.dart';
+import '../providers/voice_provider.dart';
 import '../models/chat_message_model.dart';
 import '../models/chat_session.dart';
 import '../services/chat_service.dart';
@@ -21,7 +22,6 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  bool _isVoiceListening = false;
 
   @override
   void initState() {
@@ -74,6 +74,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ref.read(chatMessagesProvider.notifier).addMessage(aiResponse);
       ref.read(chatSessionProvider.notifier).addMessage(aiResponse);
 
+      // Speak AI response
+      ref.read(voiceStateProvider.notifier).speak(aiResponse.content);
+
       _scrollToBottom();
     } catch (e) {
       // Handle error
@@ -106,24 +109,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     });
   }
 
-  void _toggleVoiceInput() {
-    setState(() {
-      _isVoiceListening = !_isVoiceListening;
-    });
-
-    // TODO: Integrate speech_to_text
-    if (_isVoiceListening) {
-      // Start listening
-    } else {
-      // Stop listening
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final messages = ref.watch(chatMessagesProvider);
     final isAiTyping = ref.watch(isAiTypingProvider);
     final session = ref.watch(chatSessionProvider);
+    final voiceState = ref.watch(voiceStateProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -247,8 +238,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           children: [
             // Voice input button
             VoiceInputButton(
-              isListening: _isVoiceListening,
-              onPressed: _toggleVoiceInput,
+              size: 48,
+              onSpeechResult: () {
+                final text = ref.read(voiceStateProvider).recognizedText;
+                if (text != null && text.isNotEmpty) {
+                  _sendMessage(text);
+                }
+              },
             ),
             const SizedBox(width: 12),
 

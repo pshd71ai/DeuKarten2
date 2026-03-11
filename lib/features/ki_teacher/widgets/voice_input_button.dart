@@ -1,91 +1,116 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_typography.dart';
+import '../providers/voice_provider.dart';
+import '../services/voice_service.dart';
 
-class VoiceInputButton extends StatefulWidget {
-  final bool isListening;
-  final VoidCallback onPressed;
+class VoiceInputButton extends ConsumerWidget {
+  final VoidCallback? onSpeechResult;
+  final double size;
 
   const VoiceInputButton({
-    required this.isListening,
-    required this.onPressed,
     super.key,
+    this.onSpeechResult,
+    this.size = 64,
   });
 
   @override
-  State<VoiceInputButton> createState() => _VoiceInputButtonState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final voiceState = ref.watch(voiceStateProvider);
+    final voiceNotifier = ref.read(voiceStateProvider.notifier);
 
-class _VoiceInputButtonState extends State<VoiceInputButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
+    // Handle permission denied
+    if (voiceState.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showPermissionDialog(context);
+      });
+    }
 
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
+    return GestureDetector(
+      onTapDown: (_) => voiceNotifier.startListening(),
+      onTapUp: (_) => _handleTapUp(voiceNotifier, voiceState),
+      onTapCancel: () => voiceNotifier.stopListening(),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: _getButtonColor(voiceState),
+          boxShadow: voiceState.isListening
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.4),
+                    blurRadius: 20,
+                    spreadRadius: 5,
+                  ),
+                ]
+              : [],
+        ),
+        child: Center(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: _buildIcon(voiceState),
+          ),
+        ),
       ),
     );
+  }
 
-    if (widget.isListening) {
-      _animationController.repeat(reverse: true);
+  Widget _buildIcon(VoiceState state) {
+    if (state.isListening) {
+      return const Icon(
+        Icons.mic,
+        color: Colors.white,
+        size: 32,
+        key: ValueKey('mic_active'),
+      );
+    }
+    return const Icon(
+      Icons.mic_none,
+      color: Colors.white,
+      size: 32,
+      key: ValueKey('mic_inactive'),
+    );
+  }
+
+  Color _getButtonColor(VoiceState state) {
+    if (state.isListening) return AppColors.primary;
+    if (state.isSpeaking) return AppColors.success;
+    return AppColors.textTertiary;
+  }
+
+  void _handleTapUp(VoiceNotifier notifier, VoiceState state) async {
+    await notifier.stopListening();
+    if (state.recognizedText?.isNotEmpty == true) {
+      onSpeechResult?.call();
     }
   }
 
-  @override
-  void didUpdateWidget(VoiceInputButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.isListening && !oldWidget.isListening) {
-      _animationController.repeat(reverse: true);
-    } else if (!widget.isListening && oldWidget.isListening) {
-      _animationController.stop();
-      _animationController.reset();
-    }
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _scaleAnimation,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _scaleAnimation.value,
-          child: Container(
-            decoration: BoxDecoration(
-              color: widget.isListening
-                  ? AppColors.accent
-                  : AppColors.primaryLight,
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              icon: Icon(
-                widget.isListening ? Icons.stop : Icons.mic,
-                color: widget.isListening
-                    ? Colors.white
-                    : AppColors.primary,
-              ),
-              onPressed: widget.onPressed,
-              tooltip: widget.isListening
-                  ? 'Stop recording'
-                  : 'Start voice input',
-            ),
+  void _showPermissionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Mikrofon-Zugriff erforderlich'),
+        content: const Text(
+          'Um die Spracherkennung zu nutzen, benötigt die App Zugriff auf dein Mikrofon.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Abbrechen'),
           ),
-        );
-      },
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              openAppSettings();
+            },
+            child: const Text('Einstellungen öffnen'),
+          ),
+        ],
+      ),
     );
   }
 }
