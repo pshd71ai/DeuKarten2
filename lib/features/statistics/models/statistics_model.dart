@@ -6,6 +6,8 @@ class StatisticsModel {
   final int testsTaken;
   final double averageScore;
   final int studyTimeMinutes;
+  final int xpEarned;
+  final int retentionCards; // Cards retained from previous sessions
 
   StatisticsModel({
     required this.id,
@@ -15,9 +17,13 @@ class StatisticsModel {
     this.testsTaken = 0,
     this.averageScore = 0.0,
     this.studyTimeMinutes = 0,
+    this.xpEarned = 0,
+    this.retentionCards = 0,
   });
 
   double get accuracy => cardsReviewed > 0 ? cardsLearned / cardsReviewed : 0.0;
+
+  double get retentionRate => cardsReviewed > 0 ? retentionCards / cardsReviewed : 0.0;
 
   StatisticsModel copyWith({
     String? id,
@@ -27,6 +33,8 @@ class StatisticsModel {
     int? testsTaken,
     double? averageScore,
     int? studyTimeMinutes,
+    int? xpEarned,
+    int? retentionCards,
   }) {
     return StatisticsModel(
       id: id ?? this.id,
@@ -36,6 +44,8 @@ class StatisticsModel {
       testsTaken: testsTaken ?? this.testsTaken,
       averageScore: averageScore ?? this.averageScore,
       studyTimeMinutes: studyTimeMinutes ?? this.studyTimeMinutes,
+      xpEarned: xpEarned ?? this.xpEarned,
+      retentionCards: retentionCards ?? this.retentionCards,
     );
   }
 
@@ -48,6 +58,8 @@ class StatisticsModel {
       'testsTaken': testsTaken,
       'averageScore': averageScore,
       'studyTimeMinutes': studyTimeMinutes,
+      'xpEarned': xpEarned,
+      'retentionCards': retentionCards,
     };
   }
 
@@ -60,6 +72,8 @@ class StatisticsModel {
       testsTaken: json['testsTaken'] as int? ?? 0,
       averageScore: json['averageScore'] as double? ?? 0.0,
       studyTimeMinutes: json['studyTimeMinutes'] as int? ?? 0,
+      xpEarned: json['xpEarned'] as int? ?? 0,
+      retentionCards: json['retentionCards'] as int? ?? 0,
     );
   }
 }
@@ -74,6 +88,8 @@ class OverallStatistics {
   final int currentStreak;
   final int longestStreak;
   final DateTime? lastStudyDate;
+  final int totalXP;
+  final double retentionRate;
 
   OverallStatistics({
     required this.totalCardsLearned,
@@ -85,5 +101,37 @@ class OverallStatistics {
     required this.currentStreak,
     required this.longestStreak,
     this.lastStudyDate,
+    this.totalXP = 0,
+    this.retentionRate = 0.0,
   });
+}
+
+class DailyStatistics {
+  final int cardsLearned;
+  final int testsCompleted;
+  final int studyMinutes;
+  final int xpEarned;
+
+  DailyStatistics({
+    required this.cardsLearned,
+    required this.testsCompleted,
+    required this.studyMinutes,
+    required this.xpEarned,
+  });
+
+  factory DailyStatistics.fromModel(StatisticsModel model) {
+    return DailyStatistics(
+      cardsLearned: model.cardsLearned,
+      testsCompleted: model.testsTaken,
+      studyMinutes: model.studyTimeMinutes,
+      xpEarned: model.xpEarned,
+    );
+  }
+
+  static DailyStatistics get empty => DailyStatistics(
+        cardsLearned: 0,
+        testsCompleted: 0,
+        studyMinutes: 0,
+        xpEarned: 0,
+      );
 }
