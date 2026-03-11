@@ -34,6 +34,7 @@ export 'widgets/session_progress_bar.dart';
 export 'widgets/session_action_buttons.dart';
 export 'widgets/session_views.dart';
 export 'widgets/session_app_bar.dart';
+export 'widgets/animated_flip_card.dart';
 
 // Legacy (to be updated)
 export 'providers/card_providers.dart';
