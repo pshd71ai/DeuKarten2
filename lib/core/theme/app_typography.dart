@@ -77,4 +77,10 @@ class AppTypography {
     color: AppColors.textSecondary,
     height: 1.4,
   );
+
+  // Additional styles
+  static const TextStyle displayMedium = title;
+  static const TextStyle bodyMedium = body;
+  static const TextStyle bodySmall = caption;
+  static const TextStyle headline = cardTitle;
 }

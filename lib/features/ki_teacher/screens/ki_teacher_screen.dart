@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:deu_karten/core/core.dart';
+import 'chat_screen.dart';
+import 'speaking_mode_screen.dart';
 
 class KiTeacherScreen extends StatelessWidget {
   const KiTeacherScreen({super.key});
@@ -69,7 +71,12 @@ class KiTeacherScreen extends StatelessWidget {
               title: 'Pronunciation Check',
               description: 'Practice speaking with AI feedback',
               onTap: () {
-                // TODO: Navigate to pronunciation feature
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SpeakingModeScreen(),
+                  ),
+                );
               },
             ),
             const SizedBox(height: 12),
