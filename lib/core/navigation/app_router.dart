@@ -7,6 +7,8 @@ import '../../screens/karten/learning_session_screen.dart';
 import '../../screens/karten/session_result_screen.dart';
 import '../../screens/tests/tests_screen.dart';
 import '../../screens/tests/test_detail_screen.dart';
+import '../../features/tests/screens/test_question_screen.dart';
+import '../../features/tests/screens/test_result_screen.dart' as test_result;
 import '../../screens/statistik/statistik_screen.dart';
 import '../../screens/profil/profil_screen.dart';
 import 'scaffold_with_nav_bar.dart';
@@ -64,6 +66,25 @@ GoRouter appRouter(AppRouterRef ref) {
                   final id = state.pathParameters['id'] ?? '';
                   return TestDetailScreen(id: id);
                 },
+                routes: [
+                  GoRoute(
+                    path: 'question',
+                    name: 'test_question',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      return TestQuestionScreen(testId: id);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'result',
+                    name: 'test_result',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return const test_result.TestResultScreen();
+                    },
+                  ),
+                ],
               ),
             ],
           ),

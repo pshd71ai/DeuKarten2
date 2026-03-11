@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/test_model.dart';
+import '../data/mock_tests.dart';
 
 // Sample data provider - replace with actual data source
 final testsProvider = StateNotifierProvider<TestsNotifier, List<TestModel>>((ref) {
@@ -7,7 +8,7 @@ final testsProvider = StateNotifierProvider<TestsNotifier, List<TestModel>>((ref
 });
 
 class TestsNotifier extends StateNotifier<List<TestModel>> {
-  TestsNotifier() : super(_sampleTests);
+  TestsNotifier() : super(mockTests);
 
   void addTest(TestModel test) {
     state = [...state, test];
@@ -24,7 +25,11 @@ class TestsNotifier extends StateNotifier<List<TestModel>> {
   }
 
   TestModel? getTestById(String testId) {
-    return state.firstWhere((test) => test.id == testId);
+    try {
+      return state.firstWhere((test) => test.id == testId);
+    } catch (e) {
+      return null;
+    }
   }
 
   List<TestModel> getTestsByCategory(String category) {
@@ -32,32 +37,8 @@ class TestsNotifier extends StateNotifier<List<TestModel>> {
   }
 }
 
-final _sampleTests = <TestModel>[
-  TestModel(
-    id: '1',
-    title: 'German Greetings',
-    description: 'Test your knowledge of common German greetings',
-    duration: 10,
-    category: 'Beginner',
-    minPassingScore: 70,
-    questions: [],
-  ),
-  TestModel(
-    id: '2',
-    title: 'Basic Vocabulary',
-    description: 'Essential German words and phrases',
-    duration: 20,
-    category: 'Beginner',
-    minPassingScore: 70,
-    questions: [],
-  ),
-  TestModel(
-    id: '3',
-    title: 'German Grammar',
-    description: 'Test your understanding of German grammar rules',
-    duration: 30,
-    category: 'Intermediate',
-    minPassingScore: 70,
-    questions: [],
-  ),
-];
+// Provider for filtering tests by category
+final testsByCategoryProvider = Provider.family<List<TestModel>, String>((ref, category) {
+  final tests = ref.watch(testsProvider);
+  return tests.where((t) => t.category == category).toList();
+});
