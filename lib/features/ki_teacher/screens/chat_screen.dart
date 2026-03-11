@@ -5,6 +5,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../providers/ki_teacher_providers.dart';
 import '../models/chat_message_model.dart';
+import '../models/chat_session.dart';
+import '../services/chat_service.dart';
 import '../widgets/quick_actions_widget.dart';
 import '../widgets/chat_bubble_widget.dart';
 import '../widgets/voice_input_button.dart';
@@ -22,89 +24,74 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   bool _isVoiceListening = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Start a new chat session
+    Future.microtask(() {
+      ref.read(chatSessionProvider.notifier).startSession();
+    });
+  }
+
+  @override
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _sendMessage(String text) {
+  Future<void> _sendMessage(String text) async {
     final messageText = text.trim();
     if (messageText.isEmpty) return;
 
+    // Set AI typing state
+    ref.read(isAiTypingProvider.notifier).state = true;
+
     // Add user message
-    ref.read(chatMessagesProvider.notifier).addMessage(
-          ChatMessageModel(
-            id: DateTime.now().millisecondsSinceEpoch.toString(),
-            content: messageText,
-            role: ChatMessageRole.user,
-            timestamp: DateTime.now(),
-          ),
-        );
+    final userMessage = ChatMessageModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      content: messageText,
+      role: ChatMessageRole.user,
+      timestamp: DateTime.now(),
+    );
+
+    ref.read(chatMessagesProvider.notifier).addMessage(userMessage);
+    ref.read(chatSessionProvider.notifier).addMessage(userMessage);
 
     _messageController.clear();
     _scrollToBottom();
 
-    // Simulate AI response (replace with actual AI integration)
-    Future.delayed(const Duration(seconds: 1), () {
-      ref.read(chatMessagesProvider.notifier).addMessage(
-            ChatMessageModel(
-              id: (DateTime.now().millisecondsSinceEpoch + 1).toString(),
-              content: _generateResponse(messageText),
-              role: ChatMessageRole.assistant,
-              timestamp: DateTime.now(),
-              language: 'de',
-              type: _determineMessageType(messageText),
-            ),
-          );
+    try {
+      // Get AI response
+      final session = ref.read(chatSessionProvider);
+      final chatService = ref.read(chatServiceProvider);
+
+      final aiResponse = await chatService.getAIResponse(
+        userMessage: messageText,
+        session: session!,
+      );
+
+      // Add AI response
+      ref.read(chatMessagesProvider.notifier).addMessage(aiResponse);
+      ref.read(chatSessionProvider.notifier).addMessage(aiResponse);
+
       _scrollToBottom();
-    });
-  }
+    } catch (e) {
+      // Handle error
+      final errorMessage = ChatMessageModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        content: 'Es tut mir leid, aber ich konnte keine Antwort erhalten. Bitte versuchen Sie es erneut.',
+        role: ChatMessageRole.assistant,
+        timestamp: DateTime.now(),
+        language: 'de',
+        type: ChatMessageType.text,
+      );
 
-  ChatMessageType _determineMessageType(String userMessage) {
-    final lowerMessage = userMessage.toLowerCase();
-    if (lowerMessage.contains('grammatik') ||
-        lowerMessage.contains('erkläre')) {
-      return ChatMessageType.grammar;
+      ref.read(chatMessagesProvider.notifier).addMessage(errorMessage);
+      _scrollToBottom();
+    } finally {
+      // Clear AI typing state
+      ref.read(isAiTypingProvider.notifier).state = false;
     }
-    if (lowerMessage.contains('korrigier') ||
-        lowerMessage.contains('sätze')) {
-      return ChatMessageType.correction;
-    }
-    if (lowerMessage.contains('wörter') ||
-        lowerMessage.contains('vorschlag')) {
-      return ChatMessageType.suggestions;
-    }
-    return ChatMessageType.text;
-  }
-
-  String _generateResponse(String userMessage) {
-    final lowerMessage = userMessage.toLowerCase();
-
-    // Grammar explanations
-    if (lowerMessage.contains('grammatik')) {
-      return 'Der Akkusativ wird für das direkte Objekt verwendet. Beispiel: "Ich sehe den Hund". Die Endungen sind: den, die, das.';
-    }
-
-    // Corrections
-    if (lowerMessage.contains('korrigier')) {
-      return 'Ich habe gehe|Ich bin gegangen';
-    }
-
-    // Suggestions
-    if (lowerMessage.contains('wörter')) {
-      return 'Haus\nAuto\nKatze\nHund';
-    }
-
-    // Default conversation responses
-    final responses = [
-      'Das ist gut! Mach weiter so!',
-      'Interessant! Lass uns das genauer besprechen.',
-      'Sehr gut gemacht! Noch eine Frage?',
-      'Du machst Fortschritte! Hast du noch etwas anderes, über das du sprechen möchtest?',
-      'Prima! Versuchen wir es mit einem anderen Thema.',
-    ];
-    return responses[(userMessage.length) % responses.length];
   }
 
   void _scrollToBottom() {
@@ -136,6 +123,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final messages = ref.watch(chatMessagesProvider);
     final isAiTyping = ref.watch(isAiTypingProvider);
+    final session = ref.watch(chatSessionProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -151,6 +139,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           style: TextStyle(color: AppColors.textPrimary),
         ),
         actions: [
+          if (session != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Chip(
+                label: Text(
+                  '${session.durationMinutes}m',
+                  style: TextStyle(fontSize: 11, color: AppColors.primary),
+                ),
+                backgroundColor: AppColors.primaryLight,
+              ),
+            ),
           IconButton(
             icon: Icon(Icons.more_vert, color: AppColors.textSecondary),
             onPressed: () {
