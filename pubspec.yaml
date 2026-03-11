@@ -54,7 +54,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Uncomment to add assets
-  # assets:
-  #   - assets/images/
-  #   - assets/lottie/
+  assets:
+    - assets/animations/
