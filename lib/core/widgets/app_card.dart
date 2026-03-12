@@ -4,6 +4,7 @@ import 'package:deu_karten/core/theme/app_colors.dart';
 class AppCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
+  final EdgeInsetsGeometry? margin;
   final Color? color;
   final double borderRadius;
   final VoidCallback? onTap;
@@ -12,6 +13,7 @@ class AppCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(16),
+    this.margin,
     this.color,
     this.borderRadius = 16,
     this.onTap,
@@ -29,14 +31,21 @@ class AppCard extends StatelessWidget {
       ),
     );
 
-    if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: card,
+    final cardWidget = onTap != null
+        ? InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: card,
+          )
+        : card;
+
+    if (margin != null) {
+      return Padding(
+        padding: margin!,
+        child: cardWidget,
       );
     }
 
-    return card;
+    return cardWidget;
   }
 }

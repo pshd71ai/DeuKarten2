@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:deu_karten/core/theme/app_colors.dart';
 import 'package:deu_karten/core/theme/app_typography.dart';
 
+// Alias for XpIndicator to match expected usage
+typedef XPIndicator = XpIndicator;
+
 class XpIndicator extends StatelessWidget {
   final int xp;
   final bool showProgress;
@@ -13,6 +16,14 @@ class XpIndicator extends StatelessWidget {
     this.showProgress = false,
     this.nextLevelXp,
   });
+
+  // Constructor for amount parameter to match expected usage
+  const XpIndicator.amount({
+    super.key,
+    required int amount,
+    this.showProgress = false,
+    this.nextLevelXp,
+  }) : xp = amount;
 
   @override
   Widget build(BuildContext context) {
