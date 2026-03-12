@@ -8,6 +8,7 @@ export 'models/sentence_card.dart';
 export 'models/deck.dart';
 export 'models/learning_session.dart';
 export 'models/enums.dart';
+export 'models/card_progress.dart';
 
 // Repositories
 export 'repositories/cards_repository.dart';

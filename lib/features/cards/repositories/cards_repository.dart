@@ -19,7 +19,12 @@ abstract class CardsRepository {
   Future<SentenceCard?> getSentenceCardById(String id);
 
   // Mixed - get cards for session
-  Future<List<dynamic>> getCardsForSession(String deckId, {int? limit});
+  // [dueCardIds] optional list of card IDs already filtered by spaced repetition
+  Future<List<dynamic>> getCardsForSession(
+    String deckId, {
+    int? limit,
+    List<String>? dueCardIds,
+  });
 
   // Update card progress (spaced repetition)
   Future<void> updateCardProgress(String cardId, bool wasCorrect);
@@ -93,12 +98,26 @@ class CardsRepositoryImpl implements CardsRepository {
   }
 
   @override
-  Future<List<dynamic>> getCardsForSession(String deckId, {int? limit}) async {
-    final allCards = <dynamic>[
+  Future<List<dynamic>> getCardsForSession(
+    String deckId, {
+    int? limit,
+    List<String>? dueCardIds,
+  }) async {
+    List<dynamic> allCards = <dynamic>[
       ..._wordCards,
       ..._articleCards,
       ..._sentenceCards,
     ];
+
+    if (dueCardIds != null && dueCardIds.isNotEmpty) {
+      final dueSet = dueCardIds.toSet();
+      final dueCards =
+          allCards.where((c) => dueSet.contains(c.id as String)).toList();
+      // If no cards are due, fall back to the full list so the session isn't empty
+      if (dueCards.isNotEmpty) {
+        allCards = dueCards;
+      }
+    }
 
     if (limit != null && limit > 0) {
       return allCards.take(limit).toList();

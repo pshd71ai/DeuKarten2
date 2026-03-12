@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/learning_session.dart';
 import '../models/enums.dart';
 import '../repositories/session_repository.dart';
+import '../../spaced_repetition/spaced_repetition_provider.dart';
 import 'cards_providers.dart';
 
 part 'session_provider.g.dart';
@@ -16,17 +17,30 @@ class CurrentSession extends _$CurrentSession {
   }
 
   Future<void> startSession(String deckId) async {
+    state = const AsyncLoading();
+
     final repo = ref.read(sessionRepositoryProvider);
     final cardsRepo = ref.read(cardsRepositoryProvider);
+    final srRepo = ref.read(spacedRepetitionRepositoryProvider);
 
-    // Load cards for the deck
-    final cardsData = await cardsRepo.getCardsForSession(deckId, limit: 10);
+    // Retrieve card IDs that are due for review today via SM-2
+    final allIds = [
+      ...await cardsRepo.getWordCards().then((l) => l.map((c) => c.id)),
+      ...await cardsRepo.getArticleCards().then((l) => l.map((c) => c.id)),
+      ...await cardsRepo.getSentenceCards().then((l) => l.map((c) => c.id)),
+    ];
+    final dueIds = await srRepo.getDueCardIds(allIds);
 
-    // Create session cards from loaded cards
-    final sessionCards = cardsData.asMap().entries.map((entry) {
-      final card = entry.value;
+    // Load cards filtered by SM-2 due list (fallback to full set if nothing is due)
+    final cardsData = await cardsRepo.getCardsForSession(
+      deckId,
+      limit: 20,
+      dueCardIds: dueIds.isNotEmpty ? dueIds : null,
+    );
+
+    final sessionCards = cardsData.map((card) {
       return SessionCard(
-        cardId: card.id,
+        cardId: card.id as String,
         type: _getCardType(card),
         status: CardStatus.new_card,
       );
@@ -58,7 +72,6 @@ class CurrentSession extends _$CurrentSession {
           ? (session.correctAnswers ?? 0) + 1
           : (session.correctAnswers ?? 0);
 
-      // Calculate XP: 10 XP per correct answer
       final xpEarned = correctAnswers * 10;
 
       final updatedSession = session.copyWith(
@@ -68,7 +81,6 @@ class CurrentSession extends _$CurrentSession {
         xpEarned: xpEarned,
       );
 
-      // Save progress asynchronously
       ref.read(sessionRepositoryProvider).saveSessionProgress(updatedSession);
 
       state = AsyncData(updatedSession);
@@ -82,12 +94,16 @@ class CurrentSession extends _$CurrentSession {
     final repo = ref.read(sessionRepositoryProvider);
     await repo.completeSession(session.id);
 
-    // Update card progress in repository for spaced repetition
-    final cardsRepo = ref.read(cardsRepositoryProvider);
+    // Apply SM-2 for every answered card in the session
+    final srNotifier = ref.read(spacedRepetitionNotifierProvider.notifier);
+    final reviews = <String, bool>{};
     for (final card in session.cards) {
       if (card.wasCorrect != null) {
-        await cardsRepo.updateCardProgress(card.cardId, card.wasCorrect!);
+        reviews[card.cardId] = card.wasCorrect!;
       }
+    }
+    if (reviews.isNotEmpty) {
+      await srNotifier.recordBatchReviews(reviews);
     }
 
     state = const AsyncData(null);
@@ -113,10 +129,10 @@ class CurrentSession extends _$CurrentSession {
 final currentCardIndexProvider = StateProvider<int>((ref) => 0);
 
 // Provider to get the current card data with full details
-final currentCardDataProvider = FutureProvider.family<CardData?, String>((ref, cardId) async {
+final currentCardDataProvider =
+    FutureProvider.family<CardData?, String>((ref, cardId) async {
   final cardsRepo = ref.watch(cardsRepositoryProvider);
 
-  // Try word cards first
   final wordCard = await cardsRepo.getWordCardById(cardId);
   if (wordCard != null) {
     return CardData(
@@ -132,7 +148,6 @@ final currentCardDataProvider = FutureProvider.family<CardData?, String>((ref, c
     );
   }
 
-  // Try article cards
   final articleCard = await cardsRepo.getArticleCardById(cardId);
   if (articleCard != null) {
     return CardData(
@@ -146,7 +161,6 @@ final currentCardDataProvider = FutureProvider.family<CardData?, String>((ref, c
     );
   }
 
-  // Try sentence cards
   final sentenceCard = await cardsRepo.getSentenceCardById(cardId);
   if (sentenceCard != null) {
     return CardData(
