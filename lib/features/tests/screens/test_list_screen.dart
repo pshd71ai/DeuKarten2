@@ -63,13 +63,13 @@ class TestListScreen extends ConsumerWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.info.withOpacity(0.1),
+                                color: AppColors.primary.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 '${test.duration} min',
                                 style: AppTypography.caption.copyWith(
-                                  color: AppColors.info,
+                                  color: AppColors.primary,
                                 ),
                               ),
                             ),
@@ -78,7 +78,7 @@ class TestListScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Text(
                           test.description,
-                          style: AppTypography.bodyMedium.copyWith(
+                          style: AppTypography.body.copyWith(
                             color: AppColors.textSecondary,
                           ),
                         ),

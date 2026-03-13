@@ -46,7 +46,7 @@ class KiTeacherScreen extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Practice German conversation, get instant feedback, and improve your language skills with personalized AI assistance.',
-              style: AppTypography.bodyMedium.copyWith(
+              style: AppTypography.body.copyWith(
                 color: AppColors.textSecondary,
               ),
               textAlign: TextAlign.center,

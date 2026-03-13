@@ -49,7 +49,7 @@ class CardDetailScreen extends StatelessWidget {
               AppCard(
                 child: Text(
                   card.exampleGerman!,
-                  style: AppTypography.bodyMedium,
+                  style: AppTypography.body,
                 ),
               ),
             ],
@@ -73,14 +73,14 @@ class CardDetailScreen extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTypography.bodyMedium.copyWith(
+          style: AppTypography.body.copyWith(
             color: AppColors.textSecondary,
           ),
         ),
         Text(
           value,
-          style: AppTypography.bodyMedium.copyWith(
-            fontWeight: AppTypography.fontWeightSemiBold,
+          style: AppTypography.body.copyWith(
+            fontWeight: AppTypography.body.fontWeight,
           ),
         ),
       ],

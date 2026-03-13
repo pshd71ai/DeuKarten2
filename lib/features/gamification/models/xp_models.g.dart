@@ -7,11 +7,11 @@ part of 'xp_models.dart';
 // **************************************************************************
 
 _$XpDataImpl _$$XpDataImplFromJson(Map<String, dynamic> json) => _$XpDataImpl(
-      currentXp: json['currentXp'] as int,
-      level: json['level'] as int,
-      xpForNextLevel: json['xpForNextLevel'] as int,
-      xpInCurrentLevel: json['xpInCurrentLevel'] as int,
-      totalXpEarned: json['totalXpEarned'] as int,
+      currentXp: (json['currentXp'] as num).toInt(),
+      level: (json['level'] as num).toInt(),
+      xpForNextLevel: (json['xpForNextLevel'] as num).toInt(),
+      xpInCurrentLevel: (json['xpInCurrentLevel'] as num).toInt(),
+      totalXpEarned: (json['totalXpEarned'] as num).toInt(),
       history: (json['history'] as List<dynamic>)
           .map((e) => XpHistoryEntry.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -27,10 +27,9 @@ Map<String, dynamic> _$$XpDataImplToJson(_$XpDataImpl instance) =>
       'history': instance.history,
     };
 
-_$XpHistoryEntryImpl _$$XpHistoryEntryImplFromJson(
-        Map<String, dynamic> json) =>
+_$XpHistoryEntryImpl _$$XpHistoryEntryImplFromJson(Map<String, dynamic> json) =>
     _$XpHistoryEntryImpl(
-      amount: json['amount'] as int,
+      amount: (json['amount'] as num).toInt(),
       source: json['source'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
       description: json['description'] as String?,

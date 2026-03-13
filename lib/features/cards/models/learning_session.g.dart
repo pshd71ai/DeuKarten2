@@ -18,9 +18,9 @@ _$LearningSessionImpl _$$LearningSessionImplFromJson(
       cards: (json['cards'] as List<dynamic>)
           .map((e) => SessionCard.fromJson(e as Map<String, dynamic>))
           .toList(),
-      cardsStudied: json['cardsStudied'] as int?,
-      correctAnswers: json['correctAnswers'] as int?,
-      xpEarned: json['xpEarned'] as int?,
+      cardsStudied: (json['cardsStudied'] as num?)?.toInt(),
+      correctAnswers: (json['correctAnswers'] as num?)?.toInt(),
+      xpEarned: (json['xpEarned'] as num?)?.toInt(),
       status: $enumDecodeNullable(_$SessionStatusEnumMap, json['status']) ??
           SessionStatus.inProgress,
     );
@@ -32,7 +32,7 @@ Map<String, dynamic> _$$LearningSessionImplToJson(
       'deckId': instance.deckId,
       'startedAt': instance.startedAt.toIso8601String(),
       'completedAt': instance.completedAt?.toIso8601String(),
-      'cards': instance.cards.map((e) => e.toJson()).toList(),
+      'cards': instance.cards,
       'cardsStudied': instance.cardsStudied,
       'correctAnswers': instance.correctAnswers,
       'xpEarned': instance.xpEarned,
@@ -51,7 +51,7 @@ _$SessionCardImpl _$$SessionCardImplFromJson(Map<String, dynamic> json) =>
       type: $enumDecode(_$CardTypeEnumMap, json['type']),
       status: $enumDecodeNullable(_$CardStatusEnumMap, json['status']) ??
           CardStatus.new_card,
-      attempts: json['attempts'] as int?,
+      attempts: (json['attempts'] as num?)?.toInt(),
       wasCorrect: json['wasCorrect'] as bool?,
       shownAt: json['shownAt'] == null
           ? null
@@ -86,20 +86,3 @@ const _$CardStatusEnumMap = {
   CardStatus.review: 'review',
   CardStatus.mastered: 'mastered',
 };
-
-T $enumDecode<T extends Enum>(Map<T, dynamic> enumValues, dynamic source) {
-  for (final entry in enumValues.entries) {
-    if (entry.value == source) {
-      return entry.key;
-    }
-  }
-  throw ArgumentError('`$source` is not one of the supported values: '
-      '${enumValues.values.join(', ')}');
-}
-
-T? $enumDecodeNullable<T extends Enum>(Map<T, dynamic> enumValues, dynamic source) {
-  if (source == null) {
-    return null;
-  }
-  return $enumDecode(enumValues, source);
-}

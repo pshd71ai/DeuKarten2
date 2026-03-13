@@ -6,24 +6,22 @@ part of 'test_session.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TestSession _$TestSessionFromJson(Map<String, dynamic> json) =>
-    TestSession(
-      test: json['test'] == null
-          ? throw ArgumentError.notNull('test')
-          : TestModel.fromJson(json['test'] as Map<String, dynamic>),
+_$TestSessionImpl _$$TestSessionImplFromJson(Map<String, dynamic> json) =>
+    _$TestSessionImpl(
+      test: TestModel.fromJson(json['test'] as Map<String, dynamic>),
       userAnswers: (json['userAnswers'] as List<dynamic>)
-          .map((e) => e as int)
+          .map((e) => (e as num).toInt())
           .toList(),
-      currentQuestionIndex: json['currentQuestionIndex'] as int,
+      currentQuestionIndex: (json['currentQuestionIndex'] as num).toInt(),
       startTime: json['startTime'] == null
           ? null
           : DateTime.parse(json['startTime'] as String),
-      timeLeft: json['timeLeft'] as int?,
-      timeElapsed: json['timeElapsed'] as int?,
+      timeLeft: (json['timeLeft'] as num?)?.toInt(),
+      timeElapsed: (json['timeElapsed'] as num?)?.toInt(),
       isComplete: json['isComplete'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$TestSessionToJson(TestSession instance) =>
+Map<String, dynamic> _$$TestSessionImplToJson(_$TestSessionImpl instance) =>
     <String, dynamic>{
       'test': instance.test,
       'userAnswers': instance.userAnswers,
@@ -34,16 +32,15 @@ Map<String, dynamic> _$TestSessionToJson(TestSession instance) =>
       'isComplete': instance.isComplete,
     };
 
-AnswerReview _$AnswerReviewFromJson(Map<String, dynamic> json) =>
-    AnswerReview(
-      question: json['question'] == null
-          ? throw ArgumentError.notNull('question')
-          : QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
+_$AnswerReviewImpl _$$AnswerReviewImplFromJson(Map<String, dynamic> json) =>
+    _$AnswerReviewImpl(
+      question:
+          QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
       correctAnswer: json['correctAnswer'] as String,
       selectedAnswer: json['selectedAnswer'] as String,
     );
 
-Map<String, dynamic> _$AnswerReviewToJson(AnswerReview instance) =>
+Map<String, dynamic> _$$AnswerReviewImplToJson(_$AnswerReviewImpl instance) =>
     <String, dynamic>{
       'question': instance.question,
       'correctAnswer': instance.correctAnswer,

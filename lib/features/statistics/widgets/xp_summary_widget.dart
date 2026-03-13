@@ -30,7 +30,7 @@ class XPSummaryWidget extends StatelessWidget {
                   color: AppColors.textPrimary,
                 ),
               ),
-              XPIndicator(amount: totalXP),
+              XPIndicator(xp: totalXP),
             ],
           ),
           const SizedBox(height: 20),

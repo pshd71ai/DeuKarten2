@@ -54,7 +54,7 @@ class GrammarExplanationResponse extends AIResponse {
     required this.explanation,
     required this.examples,
     required this.rules,
-    super.content,
+    required super.content,
     super.success,
     super.error,
     super.timestamp,

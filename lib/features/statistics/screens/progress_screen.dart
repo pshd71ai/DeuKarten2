@@ -32,15 +32,15 @@ class ProgressScreen extends StatelessWidget {
                         isToday ? 'Today' : DateFormat('EEEE').format(date),
                         style: AppTypography.headline.copyWith(
                           fontWeight: isToday
-                              ? AppTypography.fontWeightBold
-                              : AppTypography.fontWeightSemiBold,
+                              ? FontWeight.bold
+                              : FontWeight.w600,
                         ),
                       ),
                       Text(
                         '${progress.toStringAsFixed(0)}%',
-                        style: AppTypography.bodyMedium.copyWith(
+                        style: AppTypography.body.copyWith(
                           color: AppColors.primary,
-                          fontWeight: AppTypography.fontWeightSemiBold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -50,7 +50,7 @@ class ProgressScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     child: LinearProgressIndicator(
                       value: progress / 100,
-                      backgroundColor: AppColors.divider,
+                      backgroundColor: AppColors.textTertiary,
                       valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                       minHeight: 8,
                     ),

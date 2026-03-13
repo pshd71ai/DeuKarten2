@@ -84,7 +84,7 @@ class CardListScreen extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           card.english,
-                          style: AppTypography.bodyMedium.copyWith(
+                          style: AppTypography.body.copyWith(
                             color: AppColors.textSecondary,
                           ),
                         ),

@@ -60,7 +60,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen>
                       children: [
                         Text(
                           card.german,
-                          style: AppTypography.displayLarge,
+                          style: AppTypography.displayMedium,
                           textAlign: TextAlign.center,
                         ),
                         if (showTranslation) ...[
@@ -88,10 +88,13 @@ class _LearningScreenState extends ConsumerState<LearningScreen>
               Row(
                 children: [
                   Expanded(
-                    child: AppButton(
-                      text: 'Wrong',
-                      isDestructive: true,
+                    child: ElevatedButton(
                       onPressed: () => _answer(false),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.error,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Wrong'),
                     ),
                   ),
                   const SizedBox(width: 16),

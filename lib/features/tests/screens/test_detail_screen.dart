@@ -28,7 +28,7 @@ class TestDetailScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               test.description,
-              style: AppTypography.bodyMedium.copyWith(
+              style: AppTypography.body.copyWith(
                 color: AppColors.textSecondary,
               ),
             ),
@@ -84,15 +84,15 @@ class TestDetailScreen extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             label,
-            style: AppTypography.bodyMedium.copyWith(
+            style: AppTypography.body.copyWith(
               color: AppColors.textSecondary,
             ),
           ),
           const Spacer(),
           Text(
             value,
-            style: AppTypography.bodyMedium.copyWith(
-              fontWeight: AppTypography.fontWeightSemiBold,
+            style: AppTypography.body.copyWith(
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

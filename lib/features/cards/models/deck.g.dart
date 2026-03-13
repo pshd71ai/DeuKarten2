@@ -2,16 +2,20 @@
 
 part of 'deck.dart';
 
-_$DeckImpl _$$DeckImplFromJson(Map<String, dynamic> json) =>
-    _$DeckImpl(
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$DeckImpl _$$DeckImplFromJson(Map<String, dynamic> json) => _$DeckImpl(
       id: json['id'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
       category: json['category'] as String,
       level: $enumDecode(_$DifficultyLevelEnumMap, json['level']),
-      cardIds: (json['cardIds'] as List<dynamic>).map((e) => e as String).toList(),
-      totalCards: json['totalCards'] as int,
-      cardsLearned: json['cardsLearned'] as int?,
+      cardIds:
+          (json['cardIds'] as List<dynamic>).map((e) => e as String).toList(),
+      totalCards: (json['totalCards'] as num).toInt(),
+      cardsLearned: (json['cardsLearned'] as num?)?.toInt(),
       progress: (json['progress'] as num?)?.toDouble(),
       thumbnailEmoji: json['thumbnailEmoji'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -35,3 +39,11 @@ Map<String, dynamic> _$$DeckImplToJson(_$DeckImpl instance) =>
       'createdAt': instance.createdAt.toIso8601String(),
       'lastStudied': instance.lastStudied?.toIso8601String(),
     };
+
+const _$DifficultyLevelEnumMap = {
+  DifficultyLevel.a1: 'a1',
+  DifficultyLevel.a2: 'a2',
+  DifficultyLevel.b1: 'b1',
+  DifficultyLevel.b2: 'b2',
+  DifficultyLevel.c1: 'c1',
+};

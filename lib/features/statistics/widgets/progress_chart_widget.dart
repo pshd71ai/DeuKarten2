@@ -37,7 +37,7 @@ class ProgressChartWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(data.length, (index) {
                 final value = data[index];
-                final height = maxValue > 0 ? (value / maxValue) * 100 : 0;
+                final height = maxValue > 0 ? ((value / maxValue) * 100).toDouble() : 0.0;
                 return Column(
                   children: [
                     Container(

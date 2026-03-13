@@ -21,7 +21,7 @@ class _TestQuestionScreenState extends ConsumerState<TestQuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.watch(testSessionProvider);
+    final session = ref.watch(testSessionNotifierProvider);
 
     if (session == null || session.currentQuestion == null) {
       return Scaffold(
@@ -106,7 +106,7 @@ class _TestQuestionScreenState extends ConsumerState<TestQuestionScreen> {
                               setState(() {
                                 selectedOptionIndex = -1;
                               });
-                              ref.read(testSessionProvider.notifier).previousQuestion();
+                              ref.read(testSessionNotifierProvider.notifier).previousQuestion();
                             }
                           : null,
                     ),
@@ -132,9 +132,9 @@ class _TestQuestionScreenState extends ConsumerState<TestQuestionScreen> {
   }
 
   void _handleNext(BuildContext context, WidgetRef ref) {
-    ref.read(testSessionProvider.notifier).submitAnswer(selectedOptionIndex);
+    ref.read(testSessionNotifierProvider.notifier).submitAnswer(selectedOptionIndex);
 
-    if (ref.read(testSessionProvider)?.isComplete == true) {
+    if (ref.read(testSessionNotifierProvider)?.isComplete == true) {
       context.go('/tests/result');
     } else {
       setState(() {
@@ -157,7 +157,7 @@ class _TestQuestionScreenState extends ConsumerState<TestQuestionScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(testSessionProvider.notifier).reset();
+              ref.read(testSessionNotifierProvider.notifier).reset();
               context.go('/tests');
             },
             child: const Text('Verlassen', style: TextStyle(color: AppColors.error)),

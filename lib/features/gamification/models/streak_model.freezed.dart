@@ -1,11 +1,24 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
 part of 'streak_model.dart';
 
 // **************************************************************************
-// Freezed Generator
+// FreezedGenerator
 // **************************************************************************
 
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+StreakData _$StreakDataFromJson(Map<String, dynamic> json) {
+  return _StreakData.fromJson(json);
+}
+
+/// @nodoc
 mixin _$StreakData {
   int get currentStreak => throw _privateConstructorUsedError;
   int get longestStreak => throw _privateConstructorUsedError;
@@ -14,13 +27,16 @@ mixin _$StreakData {
   List<DateTime> get studyDates => throw _privateConstructorUsedError;
   StreakMilestone? get lastMilestone => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $StreakDataCopyWith<StreakData> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
+/// @nodoc
 abstract class $StreakDataCopyWith<$Res> {
-  factory $StreakDataCopyWith(StreakData value, $Res Function(StreakData) then) =
+  factory $StreakDataCopyWith(
+          StreakData value, $Res Function(StreakData) then) =
       _$StreakDataCopyWithImpl<$Res, StreakData>;
   @useResult
   $Res call(
@@ -32,11 +48,14 @@ abstract class $StreakDataCopyWith<$Res> {
       StreakMilestone? lastMilestone});
 }
 
+/// @nodoc
 class _$StreakDataCopyWithImpl<$Res, $Val extends StreakData>
     implements $StreakDataCopyWith<$Res> {
   _$StreakDataCopyWithImpl(this._value, this._then);
 
+  // ignore: unused_field
   final $Val _value;
+  // ignore: unused_field
   final $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
@@ -52,26 +71,33 @@ class _$StreakDataCopyWithImpl<$Res, $Val extends StreakData>
     return _then(_value.copyWith(
       currentStreak: null == currentStreak
           ? _value.currentStreak
-          : currentStreak as int,
+          : currentStreak // ignore: cast_nullable_to_non_nullable
+              as int,
       longestStreak: null == longestStreak
           ? _value.longestStreak
-          : longestStreak as int,
+          : longestStreak // ignore: cast_nullable_to_non_nullable
+              as int,
       lastStudyDate: null == lastStudyDate
           ? _value.lastStudyDate
-          : lastStudyDate as DateTime,
+          : lastStudyDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       studiedToday: null == studiedToday
           ? _value.studiedToday
-          : studiedToday as bool,
+          : studiedToday // ignore: cast_nullable_to_non_nullable
+              as bool,
       studyDates: null == studyDates
           ? _value.studyDates
-          : studyDates as List<DateTime>,
+          : studyDates // ignore: cast_nullable_to_non_nullable
+              as List<DateTime>,
       lastMilestone: freezed == lastMilestone
           ? _value.lastMilestone
-          : lastMilestone as StreakMilestone?,
+          : lastMilestone // ignore: cast_nullable_to_non_nullable
+              as StreakMilestone?,
     ) as $Val);
   }
 }
 
+/// @nodoc
 abstract class _$$StreakDataImplCopyWith<$Res>
     implements $StreakDataCopyWith<$Res> {
   factory _$$StreakDataImplCopyWith(
@@ -88,6 +114,7 @@ abstract class _$$StreakDataImplCopyWith<$Res>
       StreakMilestone? lastMilestone});
 }
 
+/// @nodoc
 class __$$StreakDataImplCopyWithImpl<$Res>
     extends _$StreakDataCopyWithImpl<$Res, _$StreakDataImpl>
     implements _$$StreakDataImplCopyWith<$Res> {
@@ -108,28 +135,35 @@ class __$$StreakDataImplCopyWithImpl<$Res>
     return _then(_$StreakDataImpl(
       currentStreak: null == currentStreak
           ? _value.currentStreak
-          : currentStreak as int,
+          : currentStreak // ignore: cast_nullable_to_non_nullable
+              as int,
       longestStreak: null == longestStreak
           ? _value.longestStreak
-          : longestStreak as int,
+          : longestStreak // ignore: cast_nullable_to_non_nullable
+              as int,
       lastStudyDate: null == lastStudyDate
           ? _value.lastStudyDate
-          : lastStudyDate as DateTime,
+          : lastStudyDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       studiedToday: null == studiedToday
           ? _value.studiedToday
-          : studiedToday as bool,
+          : studiedToday // ignore: cast_nullable_to_non_nullable
+              as bool,
       studyDates: null == studyDates
           ? _value._studyDates
-          : studyDates as List<DateTime>,
+          : studyDates // ignore: cast_nullable_to_non_nullable
+              as List<DateTime>,
       lastMilestone: freezed == lastMilestone
           ? _value.lastMilestone
-          : lastMilestone as StreakMilestone?,
+          : lastMilestone // ignore: cast_nullable_to_non_nullable
+              as StreakMilestone?,
     ));
   }
 }
 
+/// @nodoc
 @JsonSerializable()
-class _$StreakDataImpl implements _StreakData {
+class _$StreakDataImpl with DiagnosticableTreeMixin implements _StreakData {
   const _$StreakDataImpl(
       {required this.currentStreak,
       required this.longestStreak,
@@ -153,15 +187,30 @@ class _$StreakDataImpl implements _StreakData {
   final List<DateTime> _studyDates;
   @override
   List<DateTime> get studyDates {
-    return _studyDates;
+    if (_studyDates is EqualUnmodifiableListView) return _studyDates;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_studyDates);
   }
 
   @override
   final StreakMilestone? lastMilestone;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'StreakData(currentStreak: $currentStreak, longestStreak: $longestStreak, lastStudyDate: $lastStudyDate, studiedToday: $studiedToday, studyDates: $studyDates, lastMilestone: $lastMilestone)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'StreakData'))
+      ..add(DiagnosticsProperty('currentStreak', currentStreak))
+      ..add(DiagnosticsProperty('longestStreak', longestStreak))
+      ..add(DiagnosticsProperty('lastStudyDate', lastStudyDate))
+      ..add(DiagnosticsProperty('studiedToday', studiedToday))
+      ..add(DiagnosticsProperty('studyDates', studyDates))
+      ..add(DiagnosticsProperty('lastMilestone', lastMilestone));
   }
 
   @override
@@ -177,7 +226,8 @@ class _$StreakDataImpl implements _StreakData {
                 other.lastStudyDate == lastStudyDate) &&
             (identical(other.studiedToday, studiedToday) ||
                 other.studiedToday == studiedToday) &&
-            const DeepCollectionEquality().equals(other._studyDates, _studyDates) &&
+            const DeepCollectionEquality()
+                .equals(other._studyDates, _studyDates) &&
             (identical(other.lastMilestone, lastMilestone) ||
                 other.lastMilestone == lastMilestone));
   }

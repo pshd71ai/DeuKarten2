@@ -13,10 +13,8 @@ class SessionResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sessionAsync = ref.watch(currentSessionProvider);
     final sessionHistoryAsync = ref.watch(sessionHistoryProvider);
 
-    // Get the last completed session from history
     final session = sessionHistoryAsync.when(
       data: (history) => history.isNotEmpty ? history.last : null,
       loading: () => null,
@@ -26,25 +24,29 @@ class SessionResultScreen extends ConsumerWidget {
     if (session == null) {
       return Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.info_outline,
-                size: 64,
-                color: AppColors.textTertiary,
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Keine Session-Daten gefunden',
-                style: AppTypography.section,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => context.go('/karten'),
-                child: const Text('Zurück zu den Decks'),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.info_outline,
+                  size: 64,
+                  color: AppColors.textTertiary,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Keine Session-Daten gefunden',
+                  style: AppTypography.section,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => context.go('/karten'),
+                  child: const Text('Zurück zu den Decks'),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -54,27 +56,25 @@ class SessionResultScreen extends ConsumerWidget {
     final cardsStudied = session.cardsStudied ?? 0;
     final xpEarned = session.xpEarned ?? 0;
     final toLearn = cardsStudied - correctAnswers;
-    final accuracy = cardsStudied > 0
-        ? ((correctAnswers / cardsStudied) * 100).round()
-        : 0;
+    final accuracy =
+    cardsStudied > 0 ? ((correctAnswers / cardsStudied) * 100).round() : 0;
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              // Success animation (using animated icon as placeholder)
               Container(
-                width: 200,
-                height: 200,
+                width: 150,
+                height: 150,
                 decoration: BoxDecoration(
                   color: AppColors.success.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.emoji_events,
-                  size: 100,
+                  size: 72,
                   color: AppColors.success,
                 )
                     .animate()
@@ -83,11 +83,12 @@ class SessionResultScreen extends ConsumerWidget {
                     .shake(duration: 400.ms),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               Text(
                 'Session beendet!',
                 style: AppTypography.title,
+                textAlign: TextAlign.center,
               )
                   .animate()
                   .fadeIn(duration: 400.ms)
@@ -101,13 +102,10 @@ class SessionResultScreen extends ConsumerWidget {
                   color: AppColors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
-              )
-                  .animate()
-                  .fadeIn(delay: 100.ms, duration: 300.ms),
+              ).animate().fadeIn(delay: 100.ms, duration: 300.ms),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
 
-              // Stats cards
               _buildStatCard(
                 icon: Icons.check_circle,
                 label: 'Richtig',
@@ -154,12 +152,10 @@ class SessionResultScreen extends ConsumerWidget {
                   .fadeIn(delay: 500.ms, duration: 300.ms)
                   .slideX(begin: -0.2, end: 0),
 
-              const Spacer(),
+              const SizedBox(height: 24),
 
-              // Action buttons
               ElevatedButton.icon(
                 onPressed: () {
-                  // Reset and go home
                   ref.read(currentCardIndexProvider.notifier).state = 0;
                   context.go('/home');
                 },
@@ -171,15 +167,12 @@ class SessionResultScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              )
-                  .animate()
-                  .fadeIn(delay: 600.ms, duration: 300.ms),
+              ).animate().fadeIn(delay: 600.ms, duration: 300.ms),
 
               const SizedBox(height: 12),
 
               TextButton.icon(
                 onPressed: () {
-                  // Reset for next session
                   ref.read(currentCardIndexProvider.notifier).state = 0;
                   context.go('/karten');
                 },
@@ -188,9 +181,9 @@ class SessionResultScreen extends ConsumerWidget {
                 style: TextButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
                 ),
-              )
-                  .animate()
-                  .fadeIn(delay: 700.ms, duration: 300.ms),
+              ).animate().fadeIn(delay: 700.ms, duration: 300.ms),
+
+              const SizedBox(height: 12),
             ],
           ),
         ),
@@ -205,7 +198,7 @@ class SessionResultScreen extends ConsumerWidget {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
@@ -217,7 +210,7 @@ class SessionResultScreen extends ConsumerWidget {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: color.withOpacity(0.2),
               borderRadius: BorderRadius.circular(8),
@@ -225,20 +218,25 @@ class SessionResultScreen extends ConsumerWidget {
             child: Icon(
               icon,
               color: color,
-              size: 24,
+              size: 22,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: AppTypography.body.copyWith(
                 color: AppColors.textSecondary,
               ),
             ),
           ),
+          const SizedBox(width: 8),
           Text(
             value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTypography.section.copyWith(
               color: color,
               fontWeight: FontWeight.bold,

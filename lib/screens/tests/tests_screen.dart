@@ -13,7 +13,6 @@ class TestsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tests = ref.watch(testsProvider);
 
-    // Count tests per category
     final grammarCount = tests.where((t) => t.category == 'Grammatik').length;
     final vocabCount = tests.where((t) => t.category == 'Wortschatz').length;
     final mixedCount = tests.where((t) => t.category == 'Gemischt').length;
@@ -24,7 +23,6 @@ class TestsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Padding(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -40,15 +38,11 @@ class TestsScreen extends ConsumerWidget {
                   ),
                   IconButton(
                     icon: Icon(Icons.filter_list, color: AppColors.textSecondary),
-                    onPressed: () {
-                      // TODO: Implement filter dialog
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
             ),
-
-            // Categories
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -56,6 +50,7 @@ class TestsScreen extends ConsumerWidget {
                   crossAxisCount: 2,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
+                  childAspectRatio: 0.88,
                   children: [
                     _TestCategoryCard(
                       icon: '📚',
@@ -108,36 +103,43 @@ class _TestCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Show test list for this category
         _showTestList(context, category);
       },
       borderRadius: BorderRadius.circular(16),
       child: AppCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              icon,
-              style: const TextStyle(fontSize: 40),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: color,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                icon,
+                style: const TextStyle(fontSize: 34),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              description,
-              style: TextStyle(
-                fontSize: 12,
-                color: AppColors.textSecondary,
+              const SizedBox(height: 10),
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                description,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -166,11 +168,10 @@ class TestListSheet extends ConsumerWidget {
       height: MediaQuery.of(context).size.height * 0.6,
       decoration: BoxDecoration(
         color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         children: [
-          // Handle
           Container(
             margin: const EdgeInsets.symmetric(vertical: 12),
             width: 40,
@@ -180,8 +181,6 @@ class TestListSheet extends ConsumerWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-
-          // Header
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -202,10 +201,7 @@ class TestListSheet extends ConsumerWidget {
               ],
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Test List
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -217,7 +213,7 @@ class TestListSheet extends ConsumerWidget {
                   child: AppCard(
                     onTap: () {
                       Navigator.pop(context);
-                      ref.read(testSessionProvider.notifier).startTest(test.id);
+                      ref.read(testSessionNotifierProvider.notifier).startTest(test.id);
                       context.go('/tests/${test.id}/question');
                     },
                     child: Column(
@@ -228,6 +224,8 @@ class TestListSheet extends ConsumerWidget {
                             Expanded(
                               child: Text(
                                 test.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -235,6 +233,7 @@ class TestListSheet extends ConsumerWidget {
                                 ),
                               ),
                             ),
+                            const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -246,6 +245,8 @@ class TestListSheet extends ConsumerWidget {
                               ),
                               child: Text(
                                 '${test.totalQuestions} Fragen',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: AppColors.primary,
@@ -258,6 +259,8 @@ class TestListSheet extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           test.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 13,
                             color: AppColors.textSecondary,
@@ -266,8 +269,11 @@ class TestListSheet extends ConsumerWidget {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.access_time,
-                                size: 14, color: AppColors.textTertiary),
+                            Icon(
+                              Icons.access_time,
+                              size: 14,
+                              color: AppColors.textTertiary,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               '${test.duration} min',

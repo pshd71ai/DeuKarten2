@@ -1,8 +1,24 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'article_card.dart';
 
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+ArticleCard _$ArticleCardFromJson(Map<String, dynamic> json) {
+  return _ArticleCard.fromJson(json);
+}
+
+/// @nodoc
 mixin _$ArticleCard {
   String get id => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
@@ -12,11 +28,13 @@ mixin _$ArticleCard {
   String? get exampleSentence => throw _privateConstructorUsedError;
   DifficultyLevel get level => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ArticleCardCopyWith<ArticleCard> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
+/// @nodoc
 abstract class $ArticleCardCopyWith<$Res> {
   factory $ArticleCardCopyWith(
           ArticleCard value, $Res Function(ArticleCard) then) =
@@ -32,11 +50,14 @@ abstract class $ArticleCardCopyWith<$Res> {
       DifficultyLevel level});
 }
 
+/// @nodoc
 class _$ArticleCardCopyWithImpl<$Res, $Val extends ArticleCard>
     implements $ArticleCardCopyWith<$Res> {
   _$ArticleCardCopyWithImpl(this._value, this._then);
 
+  // ignore: unused_field
   final $Val _value;
+  // ignore: unused_field
   final $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
@@ -51,19 +72,39 @@ class _$ArticleCardCopyWithImpl<$Res, $Val extends ArticleCard>
     Object? level = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id ? _value.id : id as String,
-      word: null == word ? _value.word : word as String,
-      correctArticle: null == correctArticle ? _value.correctArticle : correctArticle as String,
-      options: null == options ? _value.options : options as List<String>,
-      translation: null == translation ? _value.translation : translation as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      word: null == word
+          ? _value.word
+          : word // ignore: cast_nullable_to_non_nullable
+              as String,
+      correctArticle: null == correctArticle
+          ? _value.correctArticle
+          : correctArticle // ignore: cast_nullable_to_non_nullable
+              as String,
+      options: null == options
+          ? _value.options
+          : options // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      translation: null == translation
+          ? _value.translation
+          : translation // ignore: cast_nullable_to_non_nullable
+              as String,
       exampleSentence: freezed == exampleSentence
           ? _value.exampleSentence
-          : exampleSentence as String?,
-      level: null == level ? _value.level : level as DifficultyLevel,
+          : exampleSentence // ignore: cast_nullable_to_non_nullable
+              as String?,
+      level: null == level
+          ? _value.level
+          : level // ignore: cast_nullable_to_non_nullable
+              as DifficultyLevel,
     ) as $Val);
   }
 }
 
+/// @nodoc
 abstract class _$$ArticleCardImplCopyWith<$Res>
     implements $ArticleCardCopyWith<$Res> {
   factory _$$ArticleCardImplCopyWith(
@@ -81,6 +122,7 @@ abstract class _$$ArticleCardImplCopyWith<$Res>
       DifficultyLevel level});
 }
 
+/// @nodoc
 class __$$ArticleCardImplCopyWithImpl<$Res>
     extends _$ArticleCardCopyWithImpl<$Res, _$ArticleCardImpl>
     implements _$$ArticleCardImplCopyWith<$Res> {
@@ -100,19 +142,39 @@ class __$$ArticleCardImplCopyWithImpl<$Res>
     Object? level = null,
   }) {
     return _then(_$ArticleCardImpl(
-      id: null == id ? _value.id : id as String,
-      word: null == word ? _value.word : word as String,
-      correctArticle: null == correctArticle ? _value.correctArticle : correctArticle as String,
-      options: null == options ? _value._options : options as List<String>,
-      translation: null == translation ? _value.translation : translation as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      word: null == word
+          ? _value.word
+          : word // ignore: cast_nullable_to_non_nullable
+              as String,
+      correctArticle: null == correctArticle
+          ? _value.correctArticle
+          : correctArticle // ignore: cast_nullable_to_non_nullable
+              as String,
+      options: null == options
+          ? _value._options
+          : options // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      translation: null == translation
+          ? _value.translation
+          : translation // ignore: cast_nullable_to_non_nullable
+              as String,
       exampleSentence: freezed == exampleSentence
           ? _value.exampleSentence
-          : exampleSentence as String?,
-      level: null == level ? _value.level : level as DifficultyLevel,
+          : exampleSentence // ignore: cast_nullable_to_non_nullable
+              as String?,
+      level: null == level
+          ? _value.level
+          : level // ignore: cast_nullable_to_non_nullable
+              as DifficultyLevel,
     ));
   }
 }
 
+/// @nodoc
 @JsonSerializable()
 class _$ArticleCardImpl implements _ArticleCard {
   const _$ArticleCardImpl(
@@ -137,7 +199,9 @@ class _$ArticleCardImpl implements _ArticleCard {
   final List<String> _options;
   @override
   List<String> get options {
-    return _options;
+    if (_options is EqualUnmodifiableListView) return _options;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_options);
   }
 
   @override
@@ -159,10 +223,13 @@ class _$ArticleCardImpl implements _ArticleCard {
             other is _$ArticleCardImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.word, word) || other.word == word) &&
-            (identical(other.correctArticle, correctArticle) || other.correctArticle == correctArticle) &&
+            (identical(other.correctArticle, correctArticle) ||
+                other.correctArticle == correctArticle) &&
             const DeepCollectionEquality().equals(other._options, _options) &&
-            (identical(other.translation, translation) || other.translation == translation) &&
-            (identical(other.exampleSentence, exampleSentence) || other.exampleSentence == exampleSentence) &&
+            (identical(other.translation, translation) ||
+                other.translation == translation) &&
+            (identical(other.exampleSentence, exampleSentence) ||
+                other.exampleSentence == exampleSentence) &&
             (identical(other.level, level) || other.level == level));
   }
 
@@ -186,7 +253,9 @@ class _$ArticleCardImpl implements _ArticleCard {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ArticleCardImplToJson(this);
+    return _$$ArticleCardImplToJson(
+      this,
+    );
   }
 }
 

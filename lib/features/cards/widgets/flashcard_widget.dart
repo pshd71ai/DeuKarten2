@@ -88,7 +88,7 @@ class _FlashcardWidgetState extends State<FlashcardWidget>
                 const SizedBox(height: 24),
                 Text(
                   widget.showTranslation ? widget.card.english : widget.card.german,
-                  style: AppTypography.displayLarge.copyWith(
+                  style: AppTypography.germanWord.copyWith(
                     color: widget.showTranslation
                         ? AppColors.textPrimary
                         : AppColors.surface,
@@ -99,7 +99,7 @@ class _FlashcardWidgetState extends State<FlashcardWidget>
                   const SizedBox(height: 16),
                   Text(
                     widget.card.exampleGerman!,
-                    style: AppTypography.bodyMedium.copyWith(
+                    style: AppTypography.body.copyWith(
                       color: widget.showTranslation
                           ? AppColors.textSecondary
                           : AppColors.surface.withOpacity(0.8),

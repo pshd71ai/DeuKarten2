@@ -8,7 +8,7 @@ class ChatCacheService {
   static const int _maxCacheSize = 100;
   final List<String> _accessOrder = [];
 
-  CachedResponse? getCachedResponse(String message) {
+  ChatMessageModel? getCachedResponse(String message) {
     final key = _generateCacheKey(message);
     final cached = _cache[key];
 

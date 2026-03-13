@@ -2,6 +2,10 @@
 
 part of 'word_card.dart';
 
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
 _$WordCardImpl _$$WordCardImplFromJson(Map<String, dynamic> json) =>
     _$WordCardImpl(
       id: json['id'] as String,
@@ -21,8 +25,8 @@ _$WordCardImpl _$$WordCardImplFromJson(Map<String, dynamic> json) =>
       nextReview: json['nextReview'] == null
           ? null
           : DateTime.parse(json['nextReview'] as String),
-      intervalDays: json['intervalDays'] as int?,
-      repetitionCount: json['repetitionCount'] as int? ?? 0,
+      intervalDays: (json['intervalDays'] as num?)?.toInt(),
+      repetitionCount: (json['repetitionCount'] as num?)?.toInt() ?? 0,
       easeFactor: (json['easeFactor'] as num?)?.toDouble() ?? 2.5,
     );
 
@@ -52,4 +56,12 @@ const _$DifficultyLevelEnumMap = {
   DifficultyLevel.b1: 'b1',
   DifficultyLevel.b2: 'b2',
   DifficultyLevel.c1: 'c1',
+};
+
+const _$CardTypeEnumMap = {
+  CardType.noun: 'noun',
+  CardType.verb: 'verb',
+  CardType.adjective: 'adjective',
+  CardType.article: 'article',
+  CardType.sentence: 'sentence',
 };

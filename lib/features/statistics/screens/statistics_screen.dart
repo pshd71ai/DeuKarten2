@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/app_card.dart';
+import '../models/statistics_model.dart';
 import '../providers/statistics_providers.dart';
 import '../widgets/stat_card_widget.dart';
 import '../widgets/streak_card_widget.dart';

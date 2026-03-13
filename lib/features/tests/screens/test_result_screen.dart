@@ -13,7 +13,7 @@ class TestResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(testSessionProvider);
+    final session = ref.watch(testSessionNotifierProvider);
 
     if (session == null) {
       return Scaffold(
@@ -44,7 +44,7 @@ class TestResultScreen extends ConsumerWidget {
                     onPressed: () => context.go('/tests'),
                   ),
                   const Spacer(),
-                  XPIndicator(amount: xpEarned),
+                  XpIndicator(xp: xpEarned),
                 ],
               ),
             ),
@@ -180,12 +180,14 @@ class TestResultScreen extends ConsumerWidget {
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: AppButton(
-                      text: 'Nochmal',
+                    child: ElevatedButton(
                       onPressed: () {
-                        ref.read(testSessionProvider.notifier).restart();
+                        ref.read(testSessionNotifierProvider.notifier).restart();
                       },
-                      color: AppColors.primary,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                      ),
+                      child: const Text('Nochmal'),
                     ),
                   ),
                 ],

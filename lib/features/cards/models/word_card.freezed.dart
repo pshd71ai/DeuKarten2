@@ -1,12 +1,24 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'word_card.dart';
 
 // **************************************************************************
-// Freezed Generator
+// FreezedGenerator
 // **************************************************************************
 
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+WordCard _$WordCardFromJson(Map<String, dynamic> json) {
+  return _WordCard.fromJson(json);
+}
+
+/// @nodoc
 mixin _$WordCard {
   String get id => throw _privateConstructorUsedError;
   String get germanWord => throw _privateConstructorUsedError;
@@ -25,11 +37,13 @@ mixin _$WordCard {
   int get repetitionCount => throw _privateConstructorUsedError;
   double get easeFactor => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WordCardCopyWith<WordCard> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
+/// @nodoc
 abstract class $WordCardCopyWith<$Res> {
   factory $WordCardCopyWith(WordCard value, $Res Function(WordCard) then) =
       _$WordCardCopyWithImpl<$Res, WordCard>;
@@ -53,11 +67,14 @@ abstract class $WordCardCopyWith<$Res> {
       double easeFactor});
 }
 
+/// @nodoc
 class _$WordCardCopyWithImpl<$Res, $Val extends WordCard>
     implements $WordCardCopyWith<$Res> {
   _$WordCardCopyWithImpl(this._value, this._then);
 
+  // ignore: unused_field
   final $Val _value;
+  // ignore: unused_field
   final $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
@@ -81,36 +98,75 @@ class _$WordCardCopyWithImpl<$Res, $Val extends WordCard>
     Object? easeFactor = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id ? _value.id : id as String,
-      germanWord: null == germanWord ? _value.germanWord : germanWord as String,
-      translation: null == translation ? _value.translation : translation as String,
-      article: null == article ? _value.article : article as String,
-      pluralForm: null == pluralForm ? _value.pluralForm : pluralForm as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      germanWord: null == germanWord
+          ? _value.germanWord
+          : germanWord // ignore: cast_nullable_to_non_nullable
+              as String,
+      translation: null == translation
+          ? _value.translation
+          : translation // ignore: cast_nullable_to_non_nullable
+              as String,
+      article: null == article
+          ? _value.article
+          : article // ignore: cast_nullable_to_non_nullable
+              as String,
+      pluralForm: null == pluralForm
+          ? _value.pluralForm
+          : pluralForm // ignore: cast_nullable_to_non_nullable
+              as String,
       exampleSentence: freezed == exampleSentence
           ? _value.exampleSentence
-          : exampleSentence as String?,
+          : exampleSentence // ignore: cast_nullable_to_non_nullable
+              as String?,
       exampleTranslation: freezed == exampleTranslation
           ? _value.exampleTranslation
-          : exampleTranslation as String?,
-      imageUrl: freezed == imageUrl ? _value.imageUrl : imageUrl as String?,
-      level: null == level ? _value.level : level as DifficultyLevel,
-      type: null == type ? _value.type : type as CardType,
-      tags: null == tags ? _value.tags : tags as List<String>,
+          : exampleTranslation // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      level: null == level
+          ? _value.level
+          : level // ignore: cast_nullable_to_non_nullable
+              as DifficultyLevel,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CardType,
+      tags: null == tags
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       lastReviewed: freezed == lastReviewed
           ? _value.lastReviewed
-          : lastReviewed as DateTime?,
-      nextReview: freezed == nextReview ? _value.nextReview : nextReview as DateTime?,
+          : lastReviewed // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      nextReview: freezed == nextReview
+          ? _value.nextReview
+          : nextReview // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       intervalDays: freezed == intervalDays
           ? _value.intervalDays
-          : intervalDays as int?,
+          : intervalDays // ignore: cast_nullable_to_non_nullable
+              as int?,
       repetitionCount: null == repetitionCount
           ? _value.repetitionCount
-          : repetitionCount as int,
-      easeFactor: null == easeFactor ? _value.easeFactor : easeFactor as double,
+          : repetitionCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      easeFactor: null == easeFactor
+          ? _value.easeFactor
+          : easeFactor // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
 
+/// @nodoc
 abstract class _$$WordCardImplCopyWith<$Res>
     implements $WordCardCopyWith<$Res> {
   factory _$$WordCardImplCopyWith(
@@ -137,6 +193,7 @@ abstract class _$$WordCardImplCopyWith<$Res>
       double easeFactor});
 }
 
+/// @nodoc
 class __$$WordCardImplCopyWithImpl<$Res>
     extends _$WordCardCopyWithImpl<$Res, _$WordCardImpl>
     implements _$$WordCardImplCopyWith<$Res> {
@@ -165,36 +222,75 @@ class __$$WordCardImplCopyWithImpl<$Res>
     Object? easeFactor = null,
   }) {
     return _then(_$WordCardImpl(
-      id: null == id ? _value.id : id as String,
-      germanWord: null == germanWord ? _value.germanWord : germanWord as String,
-      translation: null == translation ? _value.translation : translation as String,
-      article: null == article ? _value.article : article as String,
-      pluralForm: null == pluralForm ? _value.pluralForm : pluralForm as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      germanWord: null == germanWord
+          ? _value.germanWord
+          : germanWord // ignore: cast_nullable_to_non_nullable
+              as String,
+      translation: null == translation
+          ? _value.translation
+          : translation // ignore: cast_nullable_to_non_nullable
+              as String,
+      article: null == article
+          ? _value.article
+          : article // ignore: cast_nullable_to_non_nullable
+              as String,
+      pluralForm: null == pluralForm
+          ? _value.pluralForm
+          : pluralForm // ignore: cast_nullable_to_non_nullable
+              as String,
       exampleSentence: freezed == exampleSentence
           ? _value.exampleSentence
-          : exampleSentence as String?,
+          : exampleSentence // ignore: cast_nullable_to_non_nullable
+              as String?,
       exampleTranslation: freezed == exampleTranslation
           ? _value.exampleTranslation
-          : exampleTranslation as String?,
-      imageUrl: freezed == imageUrl ? _value.imageUrl : imageUrl as String?,
-      level: null == level ? _value.level : level as DifficultyLevel,
-      type: null == type ? _value.type : type as CardType,
-      tags: null == tags ? _value._tags : tags as List<String>,
+          : exampleTranslation // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      level: null == level
+          ? _value.level
+          : level // ignore: cast_nullable_to_non_nullable
+              as DifficultyLevel,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CardType,
+      tags: null == tags
+          ? _value._tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       lastReviewed: freezed == lastReviewed
           ? _value.lastReviewed
-          : lastReviewed as DateTime?,
-      nextReview: freezed == nextReview ? _value.nextReview : nextReview as DateTime?,
+          : lastReviewed // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      nextReview: freezed == nextReview
+          ? _value.nextReview
+          : nextReview // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       intervalDays: freezed == intervalDays
           ? _value.intervalDays
-          : intervalDays as int?,
+          : intervalDays // ignore: cast_nullable_to_non_nullable
+              as int?,
       repetitionCount: null == repetitionCount
           ? _value.repetitionCount
-          : repetitionCount as int,
-      easeFactor: null == easeFactor ? _value.easeFactor : easeFactor as double,
+          : repetitionCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      easeFactor: null == easeFactor
+          ? _value.easeFactor
+          : easeFactor // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
 
+/// @nodoc
 @JsonSerializable()
 class _$WordCardImpl implements _WordCard {
   const _$WordCardImpl(
@@ -242,7 +338,9 @@ class _$WordCardImpl implements _WordCard {
   final List<String> _tags;
   @override
   List<String> get tags {
-    return _tags;
+    if (_tags is EqualUnmodifiableListView) return _tags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tags);
   }
 
   @override
@@ -269,21 +367,32 @@ class _$WordCardImpl implements _WordCard {
         (other.runtimeType == runtimeType &&
             other is _$WordCardImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.germanWord, germanWord) || other.germanWord == germanWord) &&
-            (identical(other.translation, translation) || other.translation == translation) &&
+            (identical(other.germanWord, germanWord) ||
+                other.germanWord == germanWord) &&
+            (identical(other.translation, translation) ||
+                other.translation == translation) &&
             (identical(other.article, article) || other.article == article) &&
-            (identical(other.pluralForm, pluralForm) || other.pluralForm == pluralForm) &&
-            (identical(other.exampleSentence, exampleSentence) || other.exampleSentence == exampleSentence) &&
-            (identical(other.exampleTranslation, exampleTranslation) || other.exampleTranslation == exampleTranslation) &&
-            (identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl) &&
+            (identical(other.pluralForm, pluralForm) ||
+                other.pluralForm == pluralForm) &&
+            (identical(other.exampleSentence, exampleSentence) ||
+                other.exampleSentence == exampleSentence) &&
+            (identical(other.exampleTranslation, exampleTranslation) ||
+                other.exampleTranslation == exampleTranslation) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.level, level) || other.level == level) &&
             (identical(other.type, type) || other.type == type) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
-            (identical(other.lastReviewed, lastReviewed) || other.lastReviewed == lastReviewed) &&
-            (identical(other.nextReview, nextReview) || other.nextReview == nextReview) &&
-            (identical(other.intervalDays, intervalDays) || other.intervalDays == intervalDays) &&
-            (identical(other.repetitionCount, repetitionCount) || other.repetitionCount == repetitionCount) &&
-            (identical(other.easeFactor, easeFactor) || other.easeFactor == easeFactor));
+            (identical(other.lastReviewed, lastReviewed) ||
+                other.lastReviewed == lastReviewed) &&
+            (identical(other.nextReview, nextReview) ||
+                other.nextReview == nextReview) &&
+            (identical(other.intervalDays, intervalDays) ||
+                other.intervalDays == intervalDays) &&
+            (identical(other.repetitionCount, repetitionCount) ||
+                other.repetitionCount == repetitionCount) &&
+            (identical(other.easeFactor, easeFactor) ||
+                other.easeFactor == easeFactor));
   }
 
   @JsonKey(ignore: true)
@@ -315,7 +424,9 @@ class _$WordCardImpl implements _WordCard {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$WordCardImplToJson(this);
+    return _$$WordCardImplToJson(
+      this,
+    );
   }
 }
 

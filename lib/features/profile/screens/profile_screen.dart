@@ -5,8 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../models/models.dart';
-import '../../providers/profile_provider.dart';
+import '../models/models.dart';
+import '../providers/providers.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});

@@ -22,7 +22,7 @@ class LearningModesGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
-      childAspectRatio: 0.85,
+      childAspectRatio: 0.6,
       children: [
         HomeLearningModeCard(
           title: 'Karten lernen',

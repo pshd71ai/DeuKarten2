@@ -1,12 +1,24 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'learning_session.dart';
 
 // **************************************************************************
-// Freezed Generator
+// FreezedGenerator
 // **************************************************************************
 
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+LearningSession _$LearningSessionFromJson(Map<String, dynamic> json) {
+  return _LearningSession.fromJson(json);
+}
+
+/// @nodoc
 mixin _$LearningSession {
   String get id => throw _privateConstructorUsedError;
   String get deckId => throw _privateConstructorUsedError;
@@ -18,11 +30,13 @@ mixin _$LearningSession {
   int? get xpEarned => throw _privateConstructorUsedError;
   SessionStatus get status => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $LearningSessionCopyWith<LearningSession> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
+/// @nodoc
 abstract class $LearningSessionCopyWith<$Res> {
   factory $LearningSessionCopyWith(
           LearningSession value, $Res Function(LearningSession) then) =
@@ -40,11 +54,14 @@ abstract class $LearningSessionCopyWith<$Res> {
       SessionStatus status});
 }
 
+/// @nodoc
 class _$LearningSessionCopyWithImpl<$Res, $Val extends LearningSession>
     implements $LearningSessionCopyWith<$Res> {
   _$LearningSessionCopyWithImpl(this._value, this._then);
 
+  // ignore: unused_field
   final $Val _value;
+  // ignore: unused_field
   final $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
@@ -63,35 +80,45 @@ class _$LearningSessionCopyWithImpl<$Res, $Val extends LearningSession>
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
-          : id as String,
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       deckId: null == deckId
           ? _value.deckId
-          : deckId as String,
+          : deckId // ignore: cast_nullable_to_non_nullable
+              as String,
       startedAt: null == startedAt
           ? _value.startedAt
-          : startedAt as DateTime,
+          : startedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       completedAt: freezed == completedAt
           ? _value.completedAt
-          : completedAt as DateTime?,
+          : completedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       cards: null == cards
           ? _value.cards
-          : cards as List<SessionCard>,
+          : cards // ignore: cast_nullable_to_non_nullable
+              as List<SessionCard>,
       cardsStudied: freezed == cardsStudied
           ? _value.cardsStudied
-          : cardsStudied as int?,
+          : cardsStudied // ignore: cast_nullable_to_non_nullable
+              as int?,
       correctAnswers: freezed == correctAnswers
           ? _value.correctAnswers
-          : correctAnswers as int?,
+          : correctAnswers // ignore: cast_nullable_to_non_nullable
+              as int?,
       xpEarned: freezed == xpEarned
           ? _value.xpEarned
-          : xpEarned as int?,
+          : xpEarned // ignore: cast_nullable_to_non_nullable
+              as int?,
       status: null == status
           ? _value.status
-          : status as SessionStatus,
+          : status // ignore: cast_nullable_to_non_nullable
+              as SessionStatus,
     ) as $Val);
   }
 }
 
+/// @nodoc
 abstract class _$$LearningSessionImplCopyWith<$Res>
     implements $LearningSessionCopyWith<$Res> {
   factory _$$LearningSessionImplCopyWith(_$LearningSessionImpl value,
@@ -111,6 +138,7 @@ abstract class _$$LearningSessionImplCopyWith<$Res>
       SessionStatus status});
 }
 
+/// @nodoc
 class __$$LearningSessionImplCopyWithImpl<$Res>
     extends _$LearningSessionCopyWithImpl<$Res, _$LearningSessionImpl>
     implements _$$LearningSessionImplCopyWith<$Res> {
@@ -134,35 +162,45 @@ class __$$LearningSessionImplCopyWithImpl<$Res>
     return _then(_$LearningSessionImpl(
       id: null == id
           ? _value.id
-          : id as String,
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       deckId: null == deckId
           ? _value.deckId
-          : deckId as String,
+          : deckId // ignore: cast_nullable_to_non_nullable
+              as String,
       startedAt: null == startedAt
           ? _value.startedAt
-          : startedAt as DateTime,
+          : startedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       completedAt: freezed == completedAt
           ? _value.completedAt
-          : completedAt as DateTime?,
+          : completedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       cards: null == cards
           ? _value._cards
-          : cards as List<SessionCard>,
+          : cards // ignore: cast_nullable_to_non_nullable
+              as List<SessionCard>,
       cardsStudied: freezed == cardsStudied
           ? _value.cardsStudied
-          : cardsStudied as int?,
+          : cardsStudied // ignore: cast_nullable_to_non_nullable
+              as int?,
       correctAnswers: freezed == correctAnswers
           ? _value.correctAnswers
-          : correctAnswers as int?,
+          : correctAnswers // ignore: cast_nullable_to_non_nullable
+              as int?,
       xpEarned: freezed == xpEarned
           ? _value.xpEarned
-          : xpEarned as int?,
+          : xpEarned // ignore: cast_nullable_to_non_nullable
+              as int?,
       status: null == status
           ? _value.status
-          : status as SessionStatus,
+          : status // ignore: cast_nullable_to_non_nullable
+              as SessionStatus,
     ));
   }
 }
 
+/// @nodoc
 @JsonSerializable()
 class _$LearningSessionImpl implements _LearningSession {
   const _$LearningSessionImpl(
@@ -191,7 +229,9 @@ class _$LearningSessionImpl implements _LearningSession {
   final List<SessionCard> _cards;
   @override
   List<SessionCard> get cards {
-    return _cards;
+    if (_cards is EqualUnmodifiableListView) return _cards;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_cards);
   }
 
   @override
@@ -216,12 +256,17 @@ class _$LearningSessionImpl implements _LearningSession {
             other is _$LearningSessionImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.deckId, deckId) || other.deckId == deckId) &&
-            (identical(other.startedAt, startedAt) || other.startedAt == startedAt) &&
-            (identical(other.completedAt, completedAt) || other.completedAt == completedAt) &&
+            (identical(other.startedAt, startedAt) ||
+                other.startedAt == startedAt) &&
+            (identical(other.completedAt, completedAt) ||
+                other.completedAt == completedAt) &&
             const DeepCollectionEquality().equals(other._cards, _cards) &&
-            (identical(other.cardsStudied, cardsStudied) || other.cardsStudied == cardsStudied) &&
-            (identical(other.correctAnswers, correctAnswers) || other.correctAnswers == correctAnswers) &&
-            (identical(other.xpEarned, xpEarned) || other.xpEarned == xpEarned) &&
+            (identical(other.cardsStudied, cardsStudied) ||
+                other.cardsStudied == cardsStudied) &&
+            (identical(other.correctAnswers, correctAnswers) ||
+                other.correctAnswers == correctAnswers) &&
+            (identical(other.xpEarned, xpEarned) ||
+                other.xpEarned == xpEarned) &&
             (identical(other.status, status) || other.status == status));
   }
 
@@ -248,7 +293,9 @@ class _$LearningSessionImpl implements _LearningSession {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LearningSessionImplToJson(this);
+    return _$$LearningSessionImplToJson(
+      this,
+    );
   }
 }
 
@@ -291,6 +338,11 @@ abstract class _LearningSession implements LearningSession {
       throw _privateConstructorUsedError;
 }
 
+SessionCard _$SessionCardFromJson(Map<String, dynamic> json) {
+  return _SessionCard.fromJson(json);
+}
+
+/// @nodoc
 mixin _$SessionCard {
   String get cardId => throw _privateConstructorUsedError;
   CardType get type => throw _privateConstructorUsedError;
@@ -300,11 +352,13 @@ mixin _$SessionCard {
   DateTime? get shownAt => throw _privateConstructorUsedError;
   DateTime? get answeredAt => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SessionCardCopyWith<SessionCard> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
+/// @nodoc
 abstract class $SessionCardCopyWith<$Res> {
   factory $SessionCardCopyWith(
           SessionCard value, $Res Function(SessionCard) then) =
@@ -320,11 +374,14 @@ abstract class $SessionCardCopyWith<$Res> {
       DateTime? answeredAt});
 }
 
+/// @nodoc
 class _$SessionCardCopyWithImpl<$Res, $Val extends SessionCard>
     implements $SessionCardCopyWith<$Res> {
   _$SessionCardCopyWithImpl(this._value, this._then);
 
+  // ignore: unused_field
   final $Val _value;
+  // ignore: unused_field
   final $Res Function($Val) _then;
 
   @pragma('vm:prefer-inline')
@@ -341,29 +398,37 @@ class _$SessionCardCopyWithImpl<$Res, $Val extends SessionCard>
     return _then(_value.copyWith(
       cardId: null == cardId
           ? _value.cardId
-          : cardId as String,
+          : cardId // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
-          : type as CardType,
+          : type // ignore: cast_nullable_to_non_nullable
+              as CardType,
       status: null == status
           ? _value.status
-          : status as CardStatus,
+          : status // ignore: cast_nullable_to_non_nullable
+              as CardStatus,
       attempts: freezed == attempts
           ? _value.attempts
-          : attempts as int?,
+          : attempts // ignore: cast_nullable_to_non_nullable
+              as int?,
       wasCorrect: freezed == wasCorrect
           ? _value.wasCorrect
-          : wasCorrect as bool?,
+          : wasCorrect // ignore: cast_nullable_to_non_nullable
+              as bool?,
       shownAt: freezed == shownAt
           ? _value.shownAt
-          : shownAt as DateTime?,
+          : shownAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       answeredAt: freezed == answeredAt
           ? _value.answeredAt
-          : answeredAt as DateTime?,
+          : answeredAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
 
+/// @nodoc
 abstract class _$$SessionCardImplCopyWith<$Res>
     implements $SessionCardCopyWith<$Res> {
   factory _$$SessionCardImplCopyWith(
@@ -381,6 +446,7 @@ abstract class _$$SessionCardImplCopyWith<$Res>
       DateTime? answeredAt});
 }
 
+/// @nodoc
 class __$$SessionCardImplCopyWithImpl<$Res>
     extends _$SessionCardCopyWithImpl<$Res, _$SessionCardImpl>
     implements _$$SessionCardImplCopyWith<$Res> {
@@ -402,29 +468,37 @@ class __$$SessionCardImplCopyWithImpl<$Res>
     return _then(_$SessionCardImpl(
       cardId: null == cardId
           ? _value.cardId
-          : cardId as String,
+          : cardId // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
-          : type as CardType,
+          : type // ignore: cast_nullable_to_non_nullable
+              as CardType,
       status: null == status
           ? _value.status
-          : status as CardStatus,
+          : status // ignore: cast_nullable_to_non_nullable
+              as CardStatus,
       attempts: freezed == attempts
           ? _value.attempts
-          : attempts as int?,
+          : attempts // ignore: cast_nullable_to_non_nullable
+              as int?,
       wasCorrect: freezed == wasCorrect
           ? _value.wasCorrect
-          : wasCorrect as bool?,
+          : wasCorrect // ignore: cast_nullable_to_non_nullable
+              as bool?,
       shownAt: freezed == shownAt
           ? _value.shownAt
-          : shownAt as DateTime?,
+          : shownAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       answeredAt: freezed == answeredAt
           ? _value.answeredAt
-          : answeredAt as DateTime?,
+          : answeredAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
 
+/// @nodoc
 @JsonSerializable()
 class _$SessionCardImpl implements _SessionCard {
   const _$SessionCardImpl(
@@ -468,23 +542,19 @@ class _$SessionCardImpl implements _SessionCard {
             (identical(other.cardId, cardId) || other.cardId == cardId) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.attempts, attempts) || other.attempts == attempts) &&
-            (identical(other.wasCorrect, wasCorrect) || other.wasCorrect == wasCorrect) &&
+            (identical(other.attempts, attempts) ||
+                other.attempts == attempts) &&
+            (identical(other.wasCorrect, wasCorrect) ||
+                other.wasCorrect == wasCorrect) &&
             (identical(other.shownAt, shownAt) || other.shownAt == shownAt) &&
-            (identical(other.answeredAt, answeredAt) || other.answeredAt == answeredAt));
+            (identical(other.answeredAt, answeredAt) ||
+                other.answeredAt == answeredAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      cardId,
-      type,
-      status,
-      attempts,
-      wasCorrect,
-      shownAt,
-      answeredAt);
+  int get hashCode => Object.hash(runtimeType, cardId, type, status, attempts,
+      wasCorrect, shownAt, answeredAt);
 
   @JsonKey(ignore: true)
   @override
@@ -494,7 +564,9 @@ class _$SessionCardImpl implements _SessionCard {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SessionCardImplToJson(this);
+    return _$$SessionCardImplToJson(
+      this,
+    );
   }
 }
 
@@ -529,29 +601,4 @@ abstract class _SessionCard implements SessionCard {
   @JsonKey(ignore: true)
   _$$SessionCardImplCopyWith<_$SessionCardImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-T _$identity<T>(T value) => value;
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.',
-);
-
-class DeepCollectionEquality {
-  const DeepCollectionEquality();
-  bool equals(Object? e1, Object? e2) {
-    if (e1 is List && e2 is List) {
-      if (e1.length != e2.length) return false;
-      for (var i = 0; i < e1.length; i++) {
-        if (!equals(e1[i], e2[i])) return false;
-      }
-      return true;
-    }
-    return e1 == e2;
-  }
-  int hash(Object? o) {
-    if (o is List) {
-      return Object.hashAll(o);
-    }
-    return o.hashCode;
-  }
 }
