@@ -1,5 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../spaced_repetition/models/card_progress.dart';
+import '../../spaced_repetition/models/study_schedule.dart';
+import '../../spaced_repetition/providers/today_cards_provider.dart';
+import '../../spaced_repetition/services/spaced_repetition_service.dart';
 import '../models/learning_session.dart';
 import '../models/enums.dart';
 import '../repositories/session_repository.dart';
@@ -39,10 +43,32 @@ class CurrentSession extends _$CurrentSession {
     state = AsyncData(sessionWithCards);
   }
 
-  void answerCard(String cardId, bool knewIt) {
+  Future<void> answerCard(String cardId, bool knewIt, Difficulty difficulty) async {
+    final srsService = ref.read(srsServiceProvider);
+    final progressRepo = ref.read(progressRepositoryProvider);
+    
+    // Get current progress
+    var progress = await progressRepo.getCardProgress(cardId);
+    if (progress == null) {
+      progress = CardProgress(
+        cardId: cardId,
+        createdAt: DateTime.now(),
+      );
+    }
+    
+    // Calculate quality rating
+    final quality = srsService.getQualityRating(knewIt, difficulty);
+    
+    // Calculate next review
+    final updatedProgress = srsService.calculateNextReview(progress, quality);
+    
+    // Save progress
+    await progressRepo.saveCardProgress(updatedProgress);
+    
+    // Update session stats
     state.whenData((session) {
       if (session == null) return;
-
+      
       final updatedCards = session.cards.map((card) {
         if (card.cardId == cardId) {
           return card.copyWith(
@@ -52,27 +78,57 @@ class CurrentSession extends _$CurrentSession {
         }
         return card;
       }).toList();
-
+      
       final cardsStudied = (session.cardsStudied ?? 0) + 1;
       final correctAnswers = knewIt
           ? (session.correctAnswers ?? 0) + 1
           : (session.correctAnswers ?? 0);
-
+      
       // Calculate XP: 10 XP per correct answer
       final xpEarned = correctAnswers * 10;
-
+      
       final updatedSession = session.copyWith(
         cards: updatedCards,
         cardsStudied: cardsStudied,
         correctAnswers: correctAnswers,
         xpEarned: xpEarned,
       );
-
+      
       // Save progress asynchronously
       ref.read(sessionRepositoryProvider).saveSessionProgress(updatedSession);
-
+      
       state = AsyncData(updatedSession);
     });
+    
+    // Update daily stats
+    await _updateDailyStats(knewIt, quality);
+  }
+
+  Future<void> _updateDailyStats(bool isCorrect, int quality) async {
+    final repo = ref.read(progressRepositoryProvider);
+    final today = DateTime.now();
+    
+    var stats = await repo.getDailyStats(today);
+    if (stats == null) {
+      stats = DailyStats(
+        date: today,
+        newCardsStudied: 0,
+        reviewsCompleted: 0,
+        cardsLearned: 0,
+        xpEarned: 0,
+        averageQuality: 0,
+      );
+    }
+    
+    // Calculate running average of quality
+    final totalReviews = stats.reviewsCompleted + 1;
+    final newAvgQuality = ((stats.averageQuality * stats.reviewsCompleted) + quality) / totalReviews;
+    
+    await repo.saveDailyStats(stats.copyWith(
+      reviewsCompleted: totalReviews,
+      cardsLearned: isCorrect ? stats.cardsLearned + 1 : stats.cardsLearned,
+      averageQuality: newAvgQuality,
+    ));
   }
 
   Future<void> completeSession() async {
