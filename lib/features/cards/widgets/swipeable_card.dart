@@ -96,10 +96,10 @@ class _SwipeableCardState extends State<SwipeableCard>
                   child: isFrontVisible
                       ? widget.front
                       : Transform(
-                          transform: Matrix4.identity()..rotateY(pi),
-                          alignment: Alignment.center,
-                          child: widget.back,
-                        ),
+                    transform: Matrix4.identity()..rotateY(pi),
+                    alignment: Alignment.center,
+                    child: widget.back,
+                  ),
                 );
               },
             ),
