@@ -1134,7 +1134,7 @@ class AITeacherSettingsScreen extends ConsumerWidget {
               // Enable/Disable
               SwitchListTile(
                 title: const Text('KI-Lehrer aktiviert'),
-                subtitle: const Text('Aktiviere den KI-Lehrer für和个人化 Empfehlungen'),
+                subtitle: const Text('Aktiviere den KI-Lehrer Empfehlungen'),
                 value: true,
                 onChanged: (v) {},
               ),

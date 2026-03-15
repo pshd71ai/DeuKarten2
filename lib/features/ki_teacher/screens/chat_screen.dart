@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../providers/ki_teacher_providers.dart';
 import '../providers/voice_provider.dart';
 import '../models/chat_message_model.dart';
-import '../models/chat_session.dart';
 import '../services/chat_service.dart';
 import '../widgets/quick_actions_widget.dart';
 import '../widgets/chat_bubble_widget.dart';
@@ -26,7 +24,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    // Start a new chat session
     Future.microtask(() {
       ref.read(chatSessionProvider.notifier).startSession();
     });
@@ -43,10 +40,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final messageText = text.trim();
     if (messageText.isEmpty) return;
 
-    // Set AI typing state
     ref.read(isAiTypingProvider.notifier).state = true;
 
-    // Add user message
     final userMessage = ChatMessageModel(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       content: messageText,
@@ -61,7 +56,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _scrollToBottom();
 
     try {
-      // Get AI response
       final session = ref.read(chatSessionProvider);
       final chatService = ref.read(chatServiceProvider);
 
@@ -70,19 +64,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         session: session!,
       );
 
-      // Add AI response
       ref.read(chatMessagesProvider.notifier).addMessage(aiResponse);
       ref.read(chatSessionProvider.notifier).addMessage(aiResponse);
 
-      // Speak AI response
       ref.read(voiceStateProvider.notifier).speak(aiResponse.content);
 
       _scrollToBottom();
     } catch (e) {
-      // Handle error
       final errorMessage = ChatMessageModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        content: 'Es tut mir leid, aber ich konnte keine Antwort erhalten. Bitte versuchen Sie es erneut.',
+        content:
+        'Es tut mir leid, aber ich konnte keine Antwort erhalten. Bitte versuchen Sie es erneut.',
         role: ChatMessageRole.assistant,
         timestamp: DateTime.now(),
         language: 'de',
@@ -92,7 +84,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ref.read(chatMessagesProvider.notifier).addMessage(errorMessage);
       _scrollToBottom();
     } finally {
-      // Clear AI typing state
       ref.read(isAiTypingProvider.notifier).state = false;
     }
   }
@@ -114,9 +105,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final messages = ref.watch(chatMessagesProvider);
     final isAiTyping = ref.watch(isAiTypingProvider);
     final session = ref.watch(chatSessionProvider);
-    final voiceState = ref.watch(voiceStateProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background,
@@ -127,39 +118,49 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
         title: Text(
           'KI-Lehrer',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(color: AppColors.textPrimary),
         ),
         actions: [
           if (session != null)
             Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Chip(
-                label: Text(
-                  '${session.durationMinutes}m',
-                  style: TextStyle(fontSize: 11, color: AppColors.primary),
+              padding: const EdgeInsets.only(right: 4),
+              child: Center(
+                child: Container(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLight,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    '${session.durationMinutes}m',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-                backgroundColor: AppColors.primaryLight,
               ),
             ),
           IconButton(
             icon: Icon(Icons.more_vert, color: AppColors.textSecondary),
-            onPressed: () {
-              // TODO: Show settings menu
-            },
+            onPressed: () {},
           ),
         ],
       ),
       body: Column(
         children: [
-          // Quick Actions
           QuickActionsWidget(
             onActionSelected: (prompt) {
               _messageController.text = prompt;
               _sendMessage(prompt);
             },
           ),
-
-          // Messages List
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
@@ -171,16 +172,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 }
 
                 final message = messages[index];
-                final isUser = message.isUser;
                 return ChatBubbleWidget(
                   message: message,
-                  isUser: isUser,
+                  isUser: message.isUser,
                 );
               },
             ),
           ),
-
-          // Input Area
           _buildInputArea(),
         ],
       ),
@@ -222,7 +220,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Widget _buildInputArea() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
         color: AppColors.surface,
         boxShadow: [
@@ -234,11 +232,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ],
       ),
       child: SafeArea(
+        top: false,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // Voice input button
             VoiceInputButton(
-              size: 48,
+              size: 44,
               onSpeechResult: () {
                 final text = ref.read(voiceStateProvider).recognizedText;
                 if (text != null && text.isNotEmpty) {
@@ -246,12 +245,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 }
               },
             ),
-            const SizedBox(width: 12),
-
-            // Text input
+            const SizedBox(width: 8),
             Expanded(
               child: TextField(
                 controller: _messageController,
+                minLines: 1,
+                maxLines: 4,
                 decoration: InputDecoration(
                   hintText: 'Schreibe auf Deutsch...',
                   hintStyle: AppTypography.body.copyWith(
@@ -260,23 +259,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   filled: true,
                   fillColor: AppColors.background,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
+                    horizontal: 16,
                     vertical: 12,
                   ),
                 ),
                 onSubmitted: (_) => _sendMessage(_messageController.text),
               ),
             ),
-
-            const SizedBox(width: 12),
-
-            // Send button
+            const SizedBox(width: 8),
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.primary,
                 shape: BoxShape.circle,
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../../screens/home/home_screen.dart';
 import '../../screens/karten/karten_screen.dart';
 import '../../screens/karten/learning_session_screen.dart';
@@ -11,6 +12,7 @@ import '../../features/tests/screens/test_question_screen.dart';
 import '../../features/tests/screens/test_result_screen.dart' as test_result;
 import '../../screens/statistik/statistik_screen.dart';
 import '../../screens/profil/profil_screen.dart';
+import '../../features/ki_teacher/screens/ki_teacher_screen.dart';
 import 'scaffold_with_nav_bar.dart';
 
 part 'app_router.g.dart';
@@ -92,6 +94,11 @@ GoRouter appRouter(AppRouterRef ref) {
             path: '/statistik',
             name: 'statistik',
             builder: (context, state) => const StatistikScreen(),
+          ),
+          GoRoute(
+            path: '/ki_teacher',
+            name: 'ki_teacher',
+            builder: (context, state) => const KiTeacherScreen(),
           ),
           GoRoute(
             path: '/profil',
