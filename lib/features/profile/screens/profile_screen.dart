@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:language_code/language_code.dart';
 import 'dart:io';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -390,10 +391,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               onTap: () => _showLevelDialog(context),
             ),
             SettingsItem(
+              icon: Icons.translate,
+              title: 'Muttersprache',
+              subtitle: profile != null ? _getNativeLanguageDescription(profile.learningPrefs.nativeLanguage) : 'Ukrainisch',
+              onTap: () => _showNativeLanguageDialog(context),
+            ),
+            SettingsItem(
               icon: Icons.notifications,
               title: 'Erinnerungen',
-              subtitle: profile != null && profile.settings.dailyReminder 
-                  ? 'Täglich um ${profile.settings.reminderTime}' 
+              subtitle: profile != null && profile.settings.dailyReminder
+                  ? 'Täglich um ${profile.settings.reminderTime}'
                   : 'Deaktiviert',
               onTap: () => _showReminderDialog(context),
             ),
@@ -562,6 +569,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         return 'Français';
       default:
         return code;
+    }
+  }
+
+  String _getNativeLanguageDescription(String code) {
+    try {
+      final language = LanguageCodes.values.firstWhere(
+        (lang) => lang.code.toLowerCase() == code.toLowerCase(),
+        orElse: () => LanguageCodes.uk,
+      );
+      return '${language.nativeName} (${language.englishName})';
+    } catch (e) {
+      return code;
     }
   }
 
@@ -1091,6 +1110,81 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  void _showNativeLanguageDialog(BuildContext context) {
+    final profile = ref.read(userProfileProvider).valueOrNull;
+    String selectedCode = profile?.learningPrefs.nativeLanguage ?? 'uk';
+    final searchController = TextEditingController();
+    final focusNode = FocusNode();
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: const Text('Muttersprache auswählen'),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 400,
+            child: Column(
+              children: [
+                TextField(
+                  controller: searchController,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(
+                    hintText: 'Suche...',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                  onChanged: (value) => setState(() {}),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: LanguageCodes.values.length,
+                    itemBuilder: (context, index) {
+                      final language = LanguageCodes.values[index];
+                      final displayName = '${language.nativeName} (${language.englishName})';
+
+                      if (searchController.text.isNotEmpty &&
+                          !displayName.toLowerCase().contains(searchController.text.toLowerCase())) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return RadioListTile<String>(
+                        title: Text(displayName),
+                        subtitle: Text(language.code),
+                        value: language.code,
+                        groupValue: selectedCode,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => selectedCode = value);
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Abbrechen'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(userProfileProvider.notifier).setNativeLanguage(selectedCode);
+                Navigator.pop(context);
+              },
+              child: const Text('Speichern'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    focusNode.requestFocus();
   }
 }
 
