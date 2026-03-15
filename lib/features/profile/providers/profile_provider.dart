@@ -119,12 +119,21 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<UserProfile?>> {
   Future<void> setAutoPlayAudio(bool value) async {
     final current = state.valueOrNull;
     if (current == null) return;
-    
+
     final updatedPrefs = current.learningPrefs.copyWith(autoPlayAudio: value);
     final updated = current.copyWith(learningPrefs: updatedPrefs);
     await updateProfile(updated);
   }
-  
+
+  Future<void> setNativeLanguage(String languageCode) async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+
+    final updatedPrefs = current.learningPrefs.copyWith(nativeLanguage: languageCode);
+    final updated = current.copyWith(learningPrefs: updatedPrefs);
+    await updateProfile(updated);
+  }
+
   Future<void> setShowTranscription(bool value) async {
     final current = state.valueOrNull;
     if (current == null) return;

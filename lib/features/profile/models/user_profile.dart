@@ -43,6 +43,7 @@ class LearningPreferences with _$LearningPreferences {
     @Default(true) bool autoPlayAudio,
     @Default(false) bool showTranscription,
     @Default('standard') String learningMode,
+    @Default('uk') String nativeLanguage,
   }) = _LearningPreferences;
   
   factory LearningPreferences.fromJson(Map<String, dynamic> json) =>
