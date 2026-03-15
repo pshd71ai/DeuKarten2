@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/app_theme.dart';
 import 'core/navigation/app_router.dart';
+import 'core/database/database_providers.dart';
+import 'core/database/migration_service.dart';
 import 'features/profile/providers/profile_provider.dart';
 
 void main() async {
@@ -11,6 +13,9 @@ void main() async {
   
   // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
+
+  // Initialize Drift Database
+  await AppDatabase.initialize();
 
   // Set preferred orientations
   SystemChrome.setPreferredOrientations([
