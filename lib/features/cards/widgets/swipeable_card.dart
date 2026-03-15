@@ -93,7 +93,13 @@ class _SwipeableCardState extends State<SwipeableCard>
                     ..setEntry(3, 2, 0.001) // Perspective
                     ..rotateY(angle),
                   alignment: Alignment.center,
-                  child: isFrontVisible ? widget.front : widget.back,
+                  child: isFrontVisible
+                      ? widget.front
+                      : Transform(
+                          transform: Matrix4.identity()..rotateY(pi),
+                          alignment: Alignment.center,
+                          child: widget.back,
+                        ),
                 );
               },
             ),
