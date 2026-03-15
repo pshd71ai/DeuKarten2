@@ -12,14 +12,13 @@ class KiTeacherScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('AI Teacher'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Teacher Avatar
             Container(
-              width: 120,
-              height: 120,
+              width: 110,
+              height: 110,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -33,17 +32,17 @@ class KiTeacherScreen extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.psychology_outlined,
-                size: 64,
+                size: 56,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             Text(
               'Meet Your AI Teacher',
               style: AppTypography.displayMedium,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Text(
               'Practice German conversation, get instant feedback, and improve your language skills with personalized AI assistance.',
               style: AppTypography.body.copyWith(
@@ -51,7 +50,7 @@ class KiTeacherScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
             _buildFeatureOption(
               icon: Icons.chat_bubble_outline,
               title: 'Conversation Practice',
@@ -88,6 +87,7 @@ class KiTeacherScreen extends StatelessWidget {
                 // TODO: Navigate to grammar feature
               },
             ),
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -103,10 +103,11 @@ class KiTeacherScreen extends StatelessWidget {
     return AppCard(
       onTap: onTap,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 48,
-            height: 48,
+            width: 46,
+            height: 46,
             decoration: BoxDecoration(
               color: AppColors.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
@@ -114,21 +115,25 @@ class KiTeacherScreen extends StatelessWidget {
             child: Icon(
               icon,
               color: AppColors.primary,
-              size: 24,
+              size: 22,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: AppTypography.headline,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.headline.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.textSecondary,
                   ),
@@ -136,6 +141,7 @@ class KiTeacherScreen extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 8),
           Icon(
             Icons.chevron_right,
             color: AppColors.textTertiary,

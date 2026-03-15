@@ -48,10 +48,12 @@ class HomeScreen extends ConsumerWidget {
                 .animate()
                 .fadeIn(duration: 600.ms)
                 .slideY(begin: 0.2, end: 0, duration: 600.ms),
+
             const SizedBox(height: 24),
 
             Text('Tagesfortschritt', style: AppTypography.section),
             const SizedBox(height: 12),
+
             DailyProgressSection(
               cardsLearnedToday: cardsLearnedToday,
               dailyGoal: dailyGoal,
@@ -61,6 +63,7 @@ class HomeScreen extends ConsumerWidget {
                 .animate()
                 .fadeIn(duration: 500.ms, delay: 100.ms)
                 .slideY(begin: 0.2, end: 0, duration: 500.ms),
+
             const SizedBox(height: 24),
 
             QuickStatsRow(
@@ -71,10 +74,12 @@ class HomeScreen extends ConsumerWidget {
                 .animate()
                 .fadeIn(duration: 500.ms, delay: 200.ms)
                 .slideY(begin: 0.2, end: 0, duration: 500.ms),
+
             const SizedBox(height: 24),
 
             Text('Lernmodi', style: AppTypography.section),
             const SizedBox(height: 12),
+
             LearningModesGrid(
               onKartenTap: () => context.push('/karten'),
               onSaetzeTap: () {
@@ -91,10 +96,76 @@ class HomeScreen extends ConsumerWidget {
                 .animate()
                 .fadeIn(duration: 500.ms, delay: 300.ms)
                 .slideY(begin: 0.2, end: 0, duration: 500.ms),
+
+            const SizedBox(height: 12),
+
+            InkWell(
+              onTap: () => context.go('/ki_teacher'),
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: AppColors.primary.withOpacity(0.15),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.psychology_outlined,
+                        color: AppColors.primary,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'KI-Lehrer',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.cardTitle,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Mit AI chatten und üben',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.caption,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: AppColors.textTertiary,
+                    ),
+                  ],
+                ),
+              ),
+            )
+                .animate()
+                .fadeIn(duration: 500.ms, delay: 350.ms)
+                .slideY(begin: 0.2, end: 0, duration: 500.ms),
+
             const SizedBox(height: 24),
 
             Text('Kürzlich gelernt', style: AppTypography.section),
             const SizedBox(height: 12),
+
             const RecentDecksSection()
                 .animate()
                 .fadeIn(duration: 500.ms, delay: 400.ms)
