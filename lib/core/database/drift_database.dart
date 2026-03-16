@@ -20,6 +20,7 @@ class WordCards extends Table {
   TextColumn get level => text()(); // Stored as string for DifficultyLevel enum
   TextColumn get type => text()(); // Stored as string for CardType enum
   TextColumn get tags => text()(); // Stored as JSON string
+  TextColumn get deckId => text().references(Decks, #id, onDelete: KeyAction.cascade)();
   DateTimeColumn get lastReviewed => dateTime().nullable()();
   DateTimeColumn get nextReview => dateTime().nullable()();
   IntColumn get intervalDays => integer().nullable()();
@@ -28,6 +29,12 @@ class WordCards extends Table {
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column>> get uniqueKeys => [{deckId}];
+
+  @override
+  Set<Column>? get indices => {deckId};
 }
 
 // Article Cards Table
@@ -40,9 +47,13 @@ class ArticleCards extends Table {
   TextColumn get translation => text()();
   TextColumn get exampleSentence => text()();
   TextColumn get level => text()();
+  TextColumn get wordCardId => text().references(WordCards, #id, onDelete: KeyAction.cascade)();
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  Set<Column>? get indices => {wordCardId};
 }
 
 // Sentence Cards Table
@@ -56,9 +67,13 @@ class SentenceCards extends Table {
   TextColumn get translation => text()();
   TextColumn get level => text()();
   TextColumn get grammarTopic => text()();
+  TextColumn get deckId => text().references(Decks, #id, onDelete: KeyAction.cascade)();
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  Set<Column>? get indices => {deckId};
 }
 
 // Decks Table
@@ -204,7 +219,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -213,7 +228,16 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // Handle future migrations here
+        if (from == 1 && to == 2) {
+          // Add deckId to WordCards
+          await m.addColumn(wordCards, wordCards.deckId);
+          
+          // Add wordCardId to ArticleCards
+          await m.addColumn(articleCards, articleCards.wordCardId);
+          
+          // Add deckId to SentenceCards
+          await m.addColumn(sentenceCards, sentenceCards.deckId);
+        }
       },
     );
   }
@@ -343,6 +367,32 @@ class AppDatabase extends _$AppDatabase {
       ..where((tbl) => tbl.isComplete.equals(true))
       ..orderBy([(tbl) => OrderingTerm.desc(tbl.completedAt)]);
 
+    return query.get();
+  }
+
+  // Deck-related card queries
+  Future<List<WordCardData>> getWordCardsByDeck(String deckId) {
+    final query = select(wordCards)..where((tbl) => tbl.deckId.equals(deckId));
+    return query.get();
+  }
+
+  Stream<List<WordCardData>> watchWordCardsByDeck(String deckId) {
+    final query = select(wordCards)..where((tbl) => tbl.deckId.equals(deckId));
+    return query.watch();
+  }
+
+  Future<List<SentenceCardData>> getSentenceCardsByDeck(String deckId) {
+    final query = select(sentenceCards)..where((tbl) => tbl.deckId.equals(deckId));
+    return query.get();
+  }
+
+  Stream<List<SentenceCardData>> watchSentenceCardsByDeck(String deckId) {
+    final query = select(sentenceCards)..where((tbl) => tbl.deckId.equals(deckId));
+    return query.watch();
+  }
+
+  Future<List<ArticleCardData>> getArticleCardsByWordCard(String wordCardId) {
+    final query = select(articleCards)..where((tbl) => tbl.wordCardId.equals(wordCardId));
     return query.get();
   }
 }
