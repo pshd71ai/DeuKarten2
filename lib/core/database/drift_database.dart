@@ -121,9 +121,6 @@ class XpHistory extends Table {
   TextColumn get source => text()();
   DateTimeColumn get timestamp => dateTime()();
   TextColumn get description => text().nullable()();
-
-  @override
-  Set<Column> get primaryKey => {id};
 }
 
 // Streak Data Table
@@ -136,9 +133,6 @@ class StreakData extends Table {
   BoolColumn get studiedToday => boolean()();
   TextColumn get studyDates => text()(); // Stored as JSON string
   TextColumn get lastMilestone => text().nullable()(); // Stored as string for StreakMilestone enum
-
-  @override
-  Set<Column> get primaryKey => {id};
 }
 
 // Tests Table
@@ -237,74 +231,118 @@ class AppDatabase extends _$AppDatabase {
 
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'deu_karten.db'));
+
+    print('DB FILE PATH: ${file.path}');
+    print('DB EXISTS BEFORE OPEN: ${await file.exists()}');
+
     _instance = AppDatabase(NativeDatabase.createInBackground(file));
+
+    // Форсуємо реальне відкриття/створення
+    await _instance!.customSelect('SELECT 1').get();
+
+    print('DB EXISTS AFTER OPEN: ${await file.exists()}');
+    print('DB INITIALIZED');
   }
 
   // Convenience methods for common operations
 
   // Word Cards
-  Future<List<WordCardData>> getAllWordCards() => select(wordCards).get();
+  Future<List<WordCardData>> getAllWordCards() {
+    return select(wordCards).get();
+  }
 
-  Future<WordCardData?> getWordCardById(String id) =>
-      (select(wordCards)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  Future<WordCardData?> getWordCardById(String id) {
+    final query = select(wordCards)..where((tbl) => tbl.id.equals(id));
+    return query.getSingleOrNull();
+  }
 
-  Future<List<WordCardData>> getWordCardsByLevel(String level) =>
-      (select(wordCards)..where((tbl) => tbl.level.equals(level))).get();
+  Future<List<WordCardData>> getWordCardsByLevel(String level) {
+    final query = select(wordCards)..where((tbl) => tbl.level.equals(level));
+    return query.get();
+  }
 
   // Article Cards
-  Future<List<ArticleCardData>> getAllArticleCards() => select(articleCards).get();
+  Future<List<ArticleCardData>> getAllArticleCards() {
+    return select(articleCards).get();
+  }
 
-  Future<ArticleCardData?> getArticleCardById(String id) =>
-      (select(articleCards)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  Future<ArticleCardData?> getArticleCardById(String id) {
+    final query = select(articleCards)..where((tbl) => tbl.id.equals(id));
+    return query.getSingleOrNull();
+  }
 
   // Sentence Cards
-  Future<List<SentenceCardData>> getAllSentenceCards() => select(sentenceCards).get();
+  Future<List<SentenceCardData>> getAllSentenceCards() {
+    return select(sentenceCards).get();
+  }
 
-  Future<SentenceCardData?> getSentenceCardById(String id) =>
-      (select(sentenceCards)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  Future<SentenceCardData?> getSentenceCardById(String id) {
+    final query = select(sentenceCards)..where((tbl) => tbl.id.equals(id));
+    return query.getSingleOrNull();
+  }
 
   // Decks
-  Future<List<DeckData>> getAllDecks() => select(decks).get();
+  Future<List<DeckData>> getAllDecks() {
+    return select(decks).get();
+  }
 
-  Future<DeckData?> getDeckById(String id) =>
-      (select(decks)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  Future<DeckData?> getDeckById(String id) {
+    final query = select(decks)..where((tbl) => tbl.id.equals(id));
+    return query.getSingleOrNull();
+  }
 
-  Future<List<DeckData>> getDecksByLevel(String level) =>
-      (select(decks)..where((tbl) => tbl.level.equals(level))).get();
+  Future<List<DeckData>> getDecksByLevel(String level) {
+    final query = select(decks)..where((tbl) => tbl.level.equals(level));
+    return query.get();
+  }
 
-  Future<List<DeckData>> getRecentDecks({int limit = 5}) =>
-      (select(decks)..orderBy([(tbl) => OrderingTerm.desc(tbl.lastStudied)]))
-          .limit(limit)
-          .get();
+  Future<List<DeckData>> getRecentDecks({int limit = 5}) {
+    final query = select(decks)
+      ..orderBy([(tbl) => OrderingTerm.desc(tbl.lastStudied)])
+      ..limit(limit);
+
+    return query.get();
+  }
 
   // Learning Sessions
   Future<LearningSessionData?> getCurrentSession() async {
-    final sessions = await (select(learningSessions)
-          ..where((tbl) => tbl.status.equals('inProgress'))
-          ..orderBy([(tbl) => OrderingTerm.desc(tbl.startedAt)])
-          ..limit(1))
-        .get();
+    final query = select(learningSessions)
+      ..where((tbl) => tbl.status.equals('inProgress'))
+      ..orderBy([(tbl) => OrderingTerm.desc(tbl.startedAt)])
+      ..limit(1);
+
+    final sessions = await query.get();
     return sessions.isEmpty ? null : sessions.first;
   }
 
-  Future<List<LearningSessionData>> getSessionHistory() =>
-      (select(learningSessions)
-            ..where((tbl) => tbl.status.equals('completed'))
-            ..orderBy([(tbl) => OrderingTerm.desc(tbl.completedAt)]))
-          .get();
+  Future<List<LearningSessionData>> getSessionHistory() {
+    final query = select(learningSessions)
+      ..where((tbl) => tbl.status.equals('completed'))
+      ..orderBy([(tbl) => OrderingTerm.desc(tbl.completedAt)]);
+
+    return query.get();
+  }
 
   // Statistics
-  Future<List<StatisticsData>> getStatisticsByDateRange(DateTime start, DateTime end) =>
-      (select(statistics)
-            ..where((tbl) => tbl.date.isBiggerOrEqualValue(start))
-            ..where((tbl) => tbl.date.isSmallerOrEqualValue(end))
-            ..orderBy([(tbl) => OrderingTerm.asc(tbl.date)]))
-          .get();
+  Future<List<StatisticsData>> getStatisticsByDateRange(
+      DateTime start,
+      DateTime end,
+      ) {
+    final query = select(statistics)
+      ..where((tbl) =>
+      tbl.date.isBiggerOrEqualValue(start) &
+      tbl.date.isSmallerOrEqualValue(end))
+      ..orderBy([(tbl) => OrderingTerm.asc(tbl.date)]);
+
+    return query.get();
+  }
 
   // Test Sessions
-  Future<List<TestSessionData>> getTestHistory() =>
-      (select(testSessions)
-            ..where((tbl) => tbl.isComplete.equals(true))
-            ..orderBy([(tbl) => OrderingTerm.desc(tbl.completedAt)]))
-          .get();
+  Future<List<TestSessionData>> getTestHistory() {
+    final query = select(testSessions)
+      ..where((tbl) => tbl.isComplete.equals(true))
+      ..orderBy([(tbl) => OrderingTerm.desc(tbl.completedAt)]);
+
+    return query.get();
+  }
 }

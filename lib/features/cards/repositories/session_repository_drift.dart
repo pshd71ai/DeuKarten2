@@ -12,10 +12,9 @@ class SessionRepositoryDrift implements SessionRepository {
   SessionRepositoryDrift(this._db);
 
   @override
-  Future<String> createSession(String deckId) async {
-    final sessionId = _uuid.v4();
+  Future<LearningSession> createSession(String deckId) async {
     final session = LearningSession(
-      id: sessionId,
+      id: _uuid.v4(),
       deckId: deckId,
       startedAt: DateTime.now(),
       completedAt: null,
@@ -26,8 +25,11 @@ class SessionRepositoryDrift implements SessionRepository {
       status: SessionStatus.inProgress,
     );
 
-    await _db.into(learningSessions).insert(learningSessionToData(session));
-    return sessionId;
+    await _db.into(_db.learningSessions).insert(
+      learningSessionToData(session),
+    );
+
+    return session;
   }
 
   @override
@@ -38,26 +40,28 @@ class SessionRepositoryDrift implements SessionRepository {
 
   @override
   Future<void> saveSessionProgress(LearningSession session) async {
-    await _db.update(learningSessions).replace(
-          learningSessionToData(session),
-        );
+    await _db.update(_db.learningSessions).replace(
+      learningSessionToData(session),
+    );
   }
 
   @override
   Future<void> completeSession(String sessionId) async {
-    final sessionData = await (_db.select(learningSessions)
-          ..where((tbl) => tbl.id.equals(sessionId)))
-        .getSingleOrNull();
-    
+    final query = _db.select(_db.learningSessions)
+      ..where((tbl) => tbl.id.equals(sessionId));
+
+    final sessionData = await query.getSingleOrNull();
+
     if (sessionData != null) {
       final session = learningSessionFromData(sessionData);
       final updated = session.copyWith(
         status: SessionStatus.completed,
         completedAt: DateTime.now(),
       );
-      await _db.update(learningSessions).replace(
-            learningSessionToData(updated),
-          );
+
+      await _db.update(_db.learningSessions).replace(
+        learningSessionToData(updated),
+      );
     }
   }
 

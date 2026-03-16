@@ -1,91 +1,51 @@
+import 'package:deu_karten/core/database/converters.dart';
 import 'package:deu_karten/core/database/drift_database.dart';
-import 'package:deu_karten/core/database/seed_data.dart';
-import 'package:deu_karten/features/profile/repositories/profile_repository.dart';
+import 'package:deu_karten/features/cards/models/deck.dart';
+import 'package:deu_karten/features/cards/models/enums.dart';
+import 'package:deu_karten/features/cards/repositories/decks_repository.dart';
 
-class MigrationService {
+class DecksRepositoryDrift implements DecksRepository {
   final AppDatabase _db;
-  final ProfileRepository _profileRepo;
-  final DatabaseSeeder _seeder;
 
-  MigrationService(this._db, this._profileRepo) : _seeder = DatabaseSeeder(_db);
+  DecksRepositoryDrift(this._db);
 
-  /// Migrate data from SharedPreferences to Drift database
-  Future<void> migrateFromSharedPreferences() async {
-    // 1. Seed mock data if database is empty
-    await _seeder.seedAll();
-
-    // 2. Migrate user profile if it exists in SharedPreferences
-    await _migrateUserProfile();
-
-    // 3. Migrate session history if it exists
-    await _migrateSessionHistory();
-
-    // 4. Migrate statistics if they exist
-    await _migrateStatistics();
+  @override
+  Future<List<Deck>> getAllDecks() async {
+    final data = await _db.getAllDecks();
+    return data.map(deckFromData).toList();
   }
 
-  Future<void> _migrateUserProfile() async {
-    try {
-      final profile = await _profileRepo.getUserProfile();
-      if (profile != null) {
-        // Check if profile already exists in database
-        final existing = await (_db.select(userProfiles)
-              ..where((tbl) => tbl.id.equals(profile.id)))
-            .getSingleOrNull();
-
-        if (existing == null) {
-          // Insert profile into database
-          await _db.into(userProfiles).insert(
-                userProfileToData(profile),
-              );
-        }
-      }
-    } catch (e) {
-      // Log error but don't fail migration
-      print('Error migrating user profile: $e');
-    }
+  @override
+  Future<Deck?> getDeckById(String id) async {
+    final data = await _db.getDeckById(id);
+    return data != null ? deckFromData(data) : null;
   }
 
-  Future<void> _migrateSessionHistory() async {
-    try {
-      // Get session history from profile repo (which reads from SharedPreferences)
-      // This would need to be implemented in ProfileRepository
-      // For now, we'll just seed the database with empty session history
-      // The actual migration would look like:
-      // final history = await _profileRepo.getSessionHistory();
-      // for (final session in history) {
-      //   await _db.into(learningSessions).insert(learningSessionToData(session));
-      // }
-    } catch (e) {
-      print('Error migrating session history: $e');
-    }
+  @override
+  Future<List<Deck>> getDecksByLevel(DifficultyLevel level) async {
+    final data = await _db.getDecksByLevel(difficultyLevelToString(level));
+    return data.map(deckFromData).toList();
   }
 
-  Future<void> _migrateStatistics() async {
-    try {
-      // Get statistics from profile repo (which reads from SharedPreferences)
-      // This would need to be implemented in ProfileRepository
-      // For now, we'll just seed the database with empty statistics
-      // The actual migration would look like:
-      // final stats = await _profileRepo.getDailyStatistics();
-      // for (final stat in stats) {
-      //   await _db.into(statistics).insert(statisticsToData(stat));
-      // }
-    } catch (e) {
-      print('Error migrating statistics: $e');
-    }
+  @override
+  Future<List<Deck>> getRecentDecks({int limit = 5}) async {
+    final data = await _db.getRecentDecks(limit: limit);
+    return data.map(deckFromData).toList();
   }
 
-  /// Check if migration is needed
-  Future<bool> needsMigration() async {
-    final decks = await _db.getAllDecks();
-    return decks.isEmpty;
-  }
-
-  /// Perform initial setup including seeding
-  Future<void> performInitialSetup() async {
-    if (await needsMigration()) {
-      await _seeder.seedAll();
+  @override
+  Future<void> updateDeckProgress(String deckId, double progress) async {
+    final deckData = await _db.getDeckById(deckId);
+    if (deckData != null) {
+      final deck = deckFromData(deckData);
+      await _db.update(_db.decks).replace(
+        deckToData(
+          deck.copyWith(
+            progress: progress,
+            lastStudied: DateTime.now(),
+          ),
+        ),
+      );
     }
   }
 }

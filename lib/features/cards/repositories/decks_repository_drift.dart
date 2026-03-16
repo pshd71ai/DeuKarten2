@@ -38,14 +38,14 @@ class DecksRepositoryDrift implements DecksRepository {
     final deckData = await _db.getDeckById(deckId);
     if (deckData != null) {
       final deck = deckFromData(deckData);
-      await _db.update(decks).replace(
-            deckToData(
-              deck.copyWith(
-                progress: progress,
-                lastStudied: DateTime.now(),
-              ),
-            ),
-          );
+      await _db.update(_db.decks).replace(
+        deckToData(
+          deck.copyWith(
+            progress: progress,
+            lastStudied: DateTime.now(),
+          ),
+        ),
+      );
     }
   }
 }

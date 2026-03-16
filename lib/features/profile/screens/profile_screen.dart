@@ -8,6 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../models/models.dart';
 import '../providers/providers.dart';
+import '../../../../core/database/database_debug_screen.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -54,6 +55,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _openDatabaseDebugScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const DatabaseDebugScreen(),
       ),
     );
   }
@@ -453,6 +463,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         _buildSettingsSection(
           title: 'Daten',
           items: [
+            SettingsItem(
+              icon: Icons.storage,
+              title: 'Datenbank Debug',
+              subtitle: 'Tabellen, Pfad und Einträge anzeigen',
+              onTap: () => _openDatabaseDebugScreen(context),
+            ),
             SettingsItem(
               icon: Icons.delete_outline,
               title: 'Alle Daten löschen',

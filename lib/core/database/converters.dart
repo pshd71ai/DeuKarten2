@@ -1,64 +1,76 @@
 import 'dart:convert';
-import 'package:deu_karten/features/cards/models/word_card.dart';
+
 import 'package:deu_karten/features/cards/models/article_card.dart';
-import 'package:deu_karten/features/cards/models/sentence_card.dart';
 import 'package:deu_karten/features/cards/models/deck.dart';
-import 'package:deu_karten/features/cards/models/learning_session.dart';
 import 'package:deu_karten/features/cards/models/enums.dart';
-import 'package:deu_karten/features/gamification/models/xp_models.dart';
+import 'package:deu_karten/features/cards/models/learning_session.dart';
+import 'package:deu_karten/features/cards/models/sentence_card.dart';
+import 'package:deu_karten/features/cards/models/word_card.dart';
 import 'package:deu_karten/features/gamification/models/streak_model.dart';
-import 'package:deu_karten/features/tests/models/test_model.dart';
-import 'package:deu_karten/features/tests/models/test_session.dart';
-import 'package:deu_karten/features/statistics/models/statistics_model.dart';
+import 'package:deu_karten/features/gamification/models/xp_models.dart';
 import 'package:deu_karten/features/profile/models/user_profile.dart';
-import 'drift_database.dart';
+import 'package:deu_karten/features/statistics/models/statistics_model.dart';
+import 'package:deu_karten/features/tests/models/question_model.dart';
+import 'package:deu_karten/features/tests/models/test_model.dart';
+// Звідси прибрано test_session.dart, бо він був Unused
+
+import 'drift_database.dart' as db;
 
 // Enum converters
 String difficultyLevelToString(DifficultyLevel level) => level.name;
+
 DifficultyLevel difficultyLevelFromString(String value) =>
     DifficultyLevel.values.firstWhere((e) => e.name == value);
 
 String cardTypeToString(CardType type) => type.name;
+
 CardType cardTypeFromString(String value) =>
     CardType.values.firstWhere((e) => e.name == value);
 
 String sessionStatusToString(SessionStatus status) => status.name;
+
 SessionStatus sessionStatusFromString(String value) =>
     SessionStatus.values.firstWhere((e) => e.name == value);
 
 String xpRewardTypeToString(XpRewardType type) => type.name;
+
 XpRewardType xpRewardTypeFromString(String value) =>
     XpRewardType.values.firstWhere((e) => e.name == value);
 
-String streakMilestoneToString(StreakMilestone milestone) => milestone.name;
+String streakMilestoneToString(StreakMilestone? milestone) {
+  return milestone?.name ?? '';
+}
+
 StreakMilestone? streakMilestoneFromString(String? value) {
-  if (value == null) return null;
+  if (value == null || value.isEmpty) return null;
   try {
     return StreakMilestone.values.firstWhere((e) => e.name == value);
-  } catch (e) {
+  } catch (_) {
     return null;
   }
 }
 
-// JSON list converters for fields stored as JSON strings
-List<String> decodeStringList(String json) {
+// JSON list converters
+List<String> decodeStringList(String? json) {
+  if (json == null) return [];
   try {
     final list = jsonDecode(json) as List;
     return list.cast<String>();
-  } catch (e) {
+  } catch (_) {
     return [];
   }
 }
 
-String encodeStringList(List<String> list) {
-  return jsonEncode(list);
-}
+String encodeStringList(List<String> list) => jsonEncode(list);
 
-List<SessionCard> decodeSessionCardList(String json) {
+List<SessionCard> decodeSessionCardList(String? json) {
+  if (json == null) return [];
   try {
     final list = jsonDecode(json) as List;
-    return list.map((e) => SessionCard.fromJson(e as Map<String, dynamic>)).toList();
-  } catch (e) {
+    return list
+        .map((e) => SessionCard.fromJson(e as Map<String, dynamic>))
+        .toList();
+  } catch (_) {
     return [];
   }
 }
@@ -67,11 +79,14 @@ String encodeSessionCardList(List<SessionCard> list) {
   return jsonEncode(list.map((e) => e.toJson()).toList());
 }
 
-List<QuestionModel> decodeQuestionList(String json) {
+List<QuestionModel> decodeQuestionList(String? json) {
+  if (json == null) return [];
   try {
     final list = jsonDecode(json) as List;
-    return list.map((e) => QuestionModel.fromJson(e as Map<String, dynamic>)).toList();
-  } catch (e) {
+    return list
+        .map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+  } catch (_) {
     return [];
   }
 }
@@ -80,24 +95,24 @@ String encodeQuestionList(List<QuestionModel> list) {
   return jsonEncode(list.map((e) => e.toJson()).toList());
 }
 
-List<int> decodeIntList(String json) {
+List<int> decodeIntList(String? json) {
+  if (json == null) return [];
   try {
     final list = jsonDecode(json) as List;
     return list.cast<int>();
-  } catch (e) {
+  } catch (_) {
     return [];
   }
 }
 
-String encodeIntList(List<int> list) {
-  return jsonEncode(list);
-}
+String encodeIntList(List<int> list) => jsonEncode(list);
 
-List<DateTime> decodeDateTimeList(String json) {
+List<DateTime> decodeDateTimeList(String? json) {
+  if (json == null) return [];
   try {
     final list = jsonDecode(json) as List;
     return list.map((e) => DateTime.parse(e as String)).toList();
-  } catch (e) {
+  } catch (_) {
     return [];
   }
 }
@@ -107,7 +122,7 @@ String encodeDateTimeList(List<DateTime> list) {
 }
 
 // WordCard converters
-WordCard wordCardFromData(WordCardData data) {
+WordCard wordCardFromData(db.WordCardData data) {
   return WordCard(
     id: data.id,
     germanWord: data.germanWord,
@@ -128,8 +143,8 @@ WordCard wordCardFromData(WordCardData data) {
   );
 }
 
-WordCardData wordCardToData(WordCard card) {
-  return WordCardData(
+db.WordCardData wordCardToData(WordCard card) {
+  return db.WordCardData(
     id: card.id,
     germanWord: card.germanWord,
     translation: card.translation,
@@ -150,7 +165,7 @@ WordCardData wordCardToData(WordCard card) {
 }
 
 // ArticleCard converters
-ArticleCard articleCardFromData(ArticleCardData data) {
+ArticleCard articleCardFromData(db.ArticleCardData data) {
   return ArticleCard(
     id: data.id,
     word: data.word,
@@ -162,20 +177,20 @@ ArticleCard articleCardFromData(ArticleCardData data) {
   );
 }
 
-ArticleCardData articleCardToData(ArticleCard card) {
-  return ArticleCardData(
+db.ArticleCardData articleCardToData(ArticleCard card) {
+  return db.ArticleCardData(
     id: card.id,
     word: card.word,
     correctArticle: card.correctArticle,
     options: encodeStringList(card.options),
     translation: card.translation,
-    exampleSentence: card.exampleSentence,
+    exampleSentence: card.exampleSentence ?? '',
     level: difficultyLevelToString(card.level),
   );
 }
 
 // SentenceCard converters
-SentenceCard sentenceCardFromData(SentenceCardData data) {
+SentenceCard sentenceCardFromData(db.SentenceCardData data) {
   return SentenceCard(
     id: data.id,
     incompleteSentence: data.incompleteSentence,
@@ -188,8 +203,8 @@ SentenceCard sentenceCardFromData(SentenceCardData data) {
   );
 }
 
-SentenceCardData sentenceCardToData(SentenceCard card) {
-  return SentenceCardData(
+db.SentenceCardData sentenceCardToData(SentenceCard card) {
+  return db.SentenceCardData(
     id: card.id,
     incompleteSentence: card.incompleteSentence,
     wordOptions: encodeStringList(card.wordOptions),
@@ -197,17 +212,17 @@ SentenceCardData sentenceCardToData(SentenceCard card) {
     completeSentence: card.completeSentence,
     translation: card.translation,
     level: difficultyLevelToString(card.level),
-    grammarTopic: card.grammarTopic,
+    grammarTopic: card.grammarTopic ?? '',
   );
 }
 
 // Deck converters
-Deck deckFromData(DeckData data) {
+Deck deckFromData(db.DeckData data) {
   return Deck(
     id: data.id,
     name: data.name,
-    description: data.description,
-    category: data.category,
+    description: data.description ?? '', // ✅ Виправлено Nullable String? to String
+    category: data.category ?? '',       // ✅ Виправлено Nullable String? to String
     level: difficultyLevelFromString(data.level),
     cardIds: decodeStringList(data.cardIds),
     totalCards: data.totalCards,
@@ -219,8 +234,8 @@ Deck deckFromData(DeckData data) {
   );
 }
 
-DeckData deckToData(Deck deck) {
-  return DeckData(
+db.DeckData deckToData(Deck deck) {
+  return db.DeckData(
     id: deck.id,
     name: deck.name,
     description: deck.description,
@@ -228,19 +243,19 @@ DeckData deckToData(Deck deck) {
     level: difficultyLevelToString(deck.level),
     cardIds: encodeStringList(deck.cardIds),
     totalCards: deck.totalCards,
-    cardsLearned: deck.cardsLearned,
-    progress: deck.progress,
-    thumbnailEmoji: deck.thumbnailEmoji,
+    cardsLearned: deck.cardsLearned ?? 0,
+    progress: deck.progress ?? 0.0,
+    thumbnailEmoji: deck.thumbnailEmoji ?? '',
     createdAt: deck.createdAt,
     lastStudied: deck.lastStudied,
   );
 }
 
 // LearningSession converters
-LearningSession learningSessionFromData(LearningSessionData data) {
+LearningSession learningSessionFromData(db.LearningSessionData data) {
   return LearningSession(
     id: data.id,
-    deckId: data.deckId,
+    deckId: data.deckId ?? '', // ✅ Виправлено Nullable String? to String
     startedAt: data.startedAt,
     completedAt: data.completedAt,
     cards: decodeSessionCardList(data.cards),
@@ -251,26 +266,26 @@ LearningSession learningSessionFromData(LearningSessionData data) {
   );
 }
 
-LearningSessionData learningSessionToData(LearningSession session) {
-  return LearningSessionData(
+db.LearningSessionData learningSessionToData(LearningSession session) {
+  return db.LearningSessionData(
     id: session.id,
     deckId: session.deckId,
     startedAt: session.startedAt,
     completedAt: session.completedAt,
     cards: encodeSessionCardList(session.cards),
-    cardsStudied: session.cardsStudied,
-    correctAnswers: session.correctAnswers,
-    xpEarned: session.xpEarned,
+    cardsStudied: session.cardsStudied ?? 0,
+    correctAnswers: session.correctAnswers ?? 0,
+    xpEarned: session.xpEarned ?? 0,
     status: sessionStatusToString(session.status),
   );
 }
 
 // Statistics converters
-StatisticsModel statisticsFromData(StatisticsData data) {
+StatisticsModel statisticsFromData(db.StatisticsData data) {
   return StatisticsModel(
     id: data.id,
     date: data.date,
-    cardsLearned: data.cardsLearned,
+    cardsLearned: data.cardsLearned, // Модель має дефолт 0, тож прийме і не-nullable
     cardsReviewed: data.cardsReviewed,
     testsTaken: data.testsTaken,
     averageScore: data.averageScore,
@@ -280,8 +295,8 @@ StatisticsModel statisticsFromData(StatisticsData data) {
   );
 }
 
-StatisticsData statisticsToData(StatisticsModel stats) {
-  return StatisticsData(
+db.StatisticsData statisticsToData(StatisticsModel stats) {
+  return db.StatisticsData(
     id: stats.id,
     date: stats.date,
     cardsLearned: stats.cardsLearned,
@@ -294,8 +309,8 @@ StatisticsData statisticsToData(StatisticsModel stats) {
   );
 }
 
-// TestModel converters (partial - TestModel needs full model support)
-TestModel testFromData(TestData data) {
+// TestModel converters
+TestModel testFromData(db.TestData data) {
   return TestModel(
     id: data.id,
     title: data.title,
@@ -307,8 +322,8 @@ TestModel testFromData(TestData data) {
   );
 }
 
-TestData testToData(TestModel test) {
-  return TestData(
+db.TestData testToData(TestModel test) {
+  return db.TestData(
     id: test.id,
     title: test.title,
     description: test.description,
@@ -320,20 +335,24 @@ TestData testToData(TestModel test) {
 }
 
 // UserProfile converters
-UserProfile userProfileFromData(UserProfileData data) {
+UserProfile userProfileFromData(db.UserProfileData data) {
   return UserProfile(
     id: data.id,
     name: data.name,
     email: data.email,
     avatarUrl: data.avatarUrl,
     joinedDate: data.joinedDate,
-    settings: AppSettings.fromJson(jsonDecode(data.settings)),
-    learningPrefs: LearningPreferences.fromJson(jsonDecode(data.learningPrefs)),
+    settings: AppSettings.fromJson(
+      jsonDecode(data.settings) as Map<String, dynamic>,
+    ),
+    learningPrefs: LearningPreferences.fromJson(
+      jsonDecode(data.learningPrefs) as Map<String, dynamic>,
+    ),
   );
 }
 
-UserProfileData userProfileToData(UserProfile profile) {
-  return UserProfileData(
+db.UserProfileData userProfileToData(UserProfile profile) {
+  return db.UserProfileData(
     id: profile.id,
     name: profile.name,
     email: profile.email,
@@ -345,8 +364,9 @@ UserProfileData userProfileToData(UserProfile profile) {
 }
 
 // XP History converters
-XpHistoryEntry xpHistoryFromData(XpHistoryEntryData data) {
+XpHistoryEntry xpHistoryFromData(db.XpHistoryEntryData data) {
   return XpHistoryEntry(
+    // ❌ В XpHistoryEntry НЕМАЄ id!
     amount: data.amount,
     source: data.source,
     timestamp: data.timestamp,
@@ -354,8 +374,10 @@ XpHistoryEntry xpHistoryFromData(XpHistoryEntryData data) {
   );
 }
 
-XpHistoryEntryData xpHistoryToData(XpHistoryEntry entry) {
-  return XpHistoryEntryData(
+db.XpHistoryEntryData xpHistoryToData(XpHistoryEntry entry) {
+  return db.XpHistoryEntryData(
+    id: 0,
+    // ❌ В XpHistoryEntry НЕМАЄ id! А в Drift таблиці є autoIncrement, тому id генерується при insert
     amount: entry.amount,
     source: entry.source,
     timestamp: entry.timestamp,
@@ -364,8 +386,9 @@ XpHistoryEntryData xpHistoryToData(XpHistoryEntry entry) {
 }
 
 // StreakData converters
-StreakData streakDataFromData(StreakDataData data) {
+StreakData streakDataFromData(db.StreakDataData data) {
   return StreakData(
+    // ❌ В StreakData НЕМАЄ id!
     currentStreak: data.currentStreak,
     longestStreak: data.longestStreak,
     lastStudyDate: data.lastStudyDate,
@@ -375,13 +398,15 @@ StreakData streakDataFromData(StreakDataData data) {
   );
 }
 
-StreakDataData streakDataToData(StreakData streak) {
-  return StreakDataData(
+db.StreakDataData streakDataToData(StreakData streak) {
+  return db.StreakDataData(
+    id: 0,
+    // ❌ В StreakData НЕМАЄ id! А в Drift таблиці є autoIncrement, тому id генерується при insert
     currentStreak: streak.currentStreak,
     longestStreak: streak.longestStreak,
     lastStudyDate: streak.lastStudyDate,
     studiedToday: streak.studiedToday,
     studyDates: encodeDateTimeList(streak.studyDates),
-    lastMilestone: streak.lastMilestone?.name,
+    lastMilestone: streakMilestoneToString(streak.lastMilestone),
   );
 }

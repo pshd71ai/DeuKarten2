@@ -65,10 +65,10 @@ class CardsRepositoryDrift implements CardsRepository {
 
   @override
   Future<List<dynamic>> getCardsForSession(
-    String deckId, {
-    int? limit,
-    List<String>? dueCardIds,
-  }) async {
+      String deckId, {
+        int? limit,
+        List<String>? dueCardIds,
+      }) async {
     final wordCards = await getWordCards();
     final articleCards = await getArticleCards();
     final sentenceCards = await getSentenceCards();
@@ -100,14 +100,14 @@ class CardsRepositoryDrift implements CardsRepository {
     final wordCardData = await _db.getWordCardById(cardId);
     if (wordCardData != null) {
       final card = wordCardFromData(wordCardData);
-      await _db.update(wordCards).replace(
-            wordCardToData(
-              card.copyWith(
-                repetitionCount: card.repetitionCount + 1,
-                lastReviewed: DateTime.now(),
-              ),
-            ),
-          );
+      await _db.update(_db.wordCards).replace(
+        wordCardToData(
+          card.copyWith(
+            repetitionCount: card.repetitionCount + 1,
+            lastReviewed: DateTime.now(),
+          ),
+        ),
+      );
       return;
     }
 
