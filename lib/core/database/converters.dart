@@ -12,30 +12,68 @@ import 'package:deu_karten/features/profile/models/user_profile.dart';
 import 'package:deu_karten/features/statistics/models/statistics_model.dart';
 import 'package:deu_karten/features/tests/models/question_model.dart';
 import 'package:deu_karten/features/tests/models/test_model.dart';
-// Звідси прибрано test_session.dart, бо він був Unused
 
 import 'drift_database.dart' as db;
 
+// ─────────────────────────────────────────────
 // Enum converters
+// ─────────────────────────────────────────────
+
 String difficultyLevelToString(DifficultyLevel level) => level.name;
 
-DifficultyLevel difficultyLevelFromString(String value) =>
-    DifficultyLevel.values.firstWhere((e) => e.name == value);
+DifficultyLevel difficultyLevelFromString(String? value) {
+  final normalized = (value ?? '').trim().toLowerCase();
+
+  for (final level in DifficultyLevel.values) {
+    if (level.name.toLowerCase() == normalized) {
+      return level;
+    }
+  }
+
+  return DifficultyLevel.a1;
+}
 
 String cardTypeToString(CardType type) => type.name;
 
-CardType cardTypeFromString(String value) =>
-    CardType.values.firstWhere((e) => e.name == value);
+CardType cardTypeFromString(String? value) {
+  final normalized = (value ?? '').trim().toLowerCase();
+
+  for (final type in CardType.values) {
+    if (type.name.toLowerCase() == normalized) {
+      return type;
+    }
+  }
+
+  return CardType.values.first;
+}
 
 String sessionStatusToString(SessionStatus status) => status.name;
 
-SessionStatus sessionStatusFromString(String value) =>
-    SessionStatus.values.firstWhere((e) => e.name == value);
+SessionStatus sessionStatusFromString(String? value) {
+  final normalized = (value ?? '').trim().toLowerCase();
+
+  for (final status in SessionStatus.values) {
+    if (status.name.toLowerCase() == normalized) {
+      return status;
+    }
+  }
+
+  return SessionStatus.inProgress;
+}
 
 String xpRewardTypeToString(XpRewardType type) => type.name;
 
-XpRewardType xpRewardTypeFromString(String value) =>
-    XpRewardType.values.firstWhere((e) => e.name == value);
+XpRewardType xpRewardTypeFromString(String? value) {
+  final normalized = (value ?? '').trim().toLowerCase();
+
+  for (final type in XpRewardType.values) {
+    if (type.name.toLowerCase() == normalized) {
+      return type;
+    }
+  }
+
+  return XpRewardType.values.first;
+}
 
 String streakMilestoneToString(StreakMilestone? milestone) {
   return milestone?.name ?? '';
@@ -44,27 +82,36 @@ String streakMilestoneToString(StreakMilestone? milestone) {
 StreakMilestone? streakMilestoneFromString(String? value) {
   if (value == null || value.isEmpty) return null;
   try {
-    return StreakMilestone.values.firstWhere((e) => e.name == value);
+    return StreakMilestone.values.firstWhere(
+          (e) => e.name.toLowerCase() == value.toLowerCase(),
+    );
   } catch (_) {
     return null;
   }
 }
 
+// ─────────────────────────────────────────────
 // JSON list converters
+// ─────────────────────────────────────────────
+
 List<String> decodeStringList(String? json) {
-  if (json == null) return [];
+  if (json == null || json.isEmpty) return [];
   try {
-    final list = jsonDecode(json) as List;
-    return list.cast<String>();
-  } catch (_) {
+    final decoded = jsonDecode(json);
+    if (decoded is List) {
+      return decoded.map((e) => e.toString()).toList();
+    }
     return [];
+  } catch (_) {
+    // Якщо це не JSON, а просто рядок зі старої БД
+    return json.trim().isEmpty ? [] : [json];
   }
 }
 
 String encodeStringList(List<String> list) => jsonEncode(list);
 
 List<SessionCard> decodeSessionCardList(String? json) {
-  if (json == null) return [];
+  if (json == null || json.isEmpty) return [];
   try {
     final list = jsonDecode(json) as List;
     return list
@@ -80,7 +127,7 @@ String encodeSessionCardList(List<SessionCard> list) {
 }
 
 List<QuestionModel> decodeQuestionList(String? json) {
-  if (json == null) return [];
+  if (json == null || json.isEmpty) return [];
   try {
     final list = jsonDecode(json) as List;
     return list
@@ -96,7 +143,7 @@ String encodeQuestionList(List<QuestionModel> list) {
 }
 
 List<int> decodeIntList(String? json) {
-  if (json == null) return [];
+  if (json == null || json.isEmpty) return [];
   try {
     final list = jsonDecode(json) as List;
     return list.cast<int>();
@@ -108,7 +155,7 @@ List<int> decodeIntList(String? json) {
 String encodeIntList(List<int> list) => jsonEncode(list);
 
 List<DateTime> decodeDateTimeList(String? json) {
-  if (json == null) return [];
+  if (json == null || json.isEmpty) return [];
   try {
     final list = jsonDecode(json) as List;
     return list.map((e) => DateTime.parse(e as String)).toList();
@@ -121,7 +168,10 @@ String encodeDateTimeList(List<DateTime> list) {
   return jsonEncode(list.map((e) => e.toIso8601String()).toList());
 }
 
+// ─────────────────────────────────────────────
 // WordCard converters
+// ─────────────────────────────────────────────
+
 WordCard wordCardFromData(db.WordCardData data) {
   return WordCard(
     id: data.id,
@@ -156,6 +206,7 @@ db.WordCardData wordCardToData(WordCard card) {
     level: difficultyLevelToString(card.level),
     type: cardTypeToString(card.type),
     tags: encodeStringList(card.tags),
+    deckId: '',
     lastReviewed: card.lastReviewed,
     nextReview: card.nextReview,
     intervalDays: card.intervalDays,
@@ -164,7 +215,10 @@ db.WordCardData wordCardToData(WordCard card) {
   );
 }
 
+// ─────────────────────────────────────────────
 // ArticleCard converters
+// ─────────────────────────────────────────────
+
 ArticleCard articleCardFromData(db.ArticleCardData data) {
   return ArticleCard(
     id: data.id,
@@ -186,10 +240,14 @@ db.ArticleCardData articleCardToData(ArticleCard card) {
     translation: card.translation,
     exampleSentence: card.exampleSentence ?? '',
     level: difficultyLevelToString(card.level),
+    wordCardId: '',
   );
 }
 
+// ─────────────────────────────────────────────
 // SentenceCard converters
+// ─────────────────────────────────────────────
+
 SentenceCard sentenceCardFromData(db.SentenceCardData data) {
   return SentenceCard(
     id: data.id,
@@ -213,16 +271,20 @@ db.SentenceCardData sentenceCardToData(SentenceCard card) {
     translation: card.translation,
     level: difficultyLevelToString(card.level),
     grammarTopic: card.grammarTopic ?? '',
+    deckId: '',
   );
 }
 
+// ─────────────────────────────────────────────
 // Deck converters
+// ─────────────────────────────────────────────
+
 Deck deckFromData(db.DeckData data) {
   return Deck(
     id: data.id,
     name: data.name,
-    description: data.description ?? '', // ✅ Виправлено Nullable String? to String
-    category: data.category ?? '',       // ✅ Виправлено Nullable String? to String
+    description: data.description,
+    category: data.category,
     level: difficultyLevelFromString(data.level),
     cardIds: decodeStringList(data.cardIds),
     totalCards: data.totalCards,
@@ -251,11 +313,14 @@ db.DeckData deckToData(Deck deck) {
   );
 }
 
+// ─────────────────────────────────────────────
 // LearningSession converters
+// ─────────────────────────────────────────────
+
 LearningSession learningSessionFromData(db.LearningSessionData data) {
   return LearningSession(
     id: data.id,
-    deckId: data.deckId ?? '', // ✅ Виправлено Nullable String? to String
+    deckId: data.deckId,
     startedAt: data.startedAt,
     completedAt: data.completedAt,
     cards: decodeSessionCardList(data.cards),
@@ -280,12 +345,15 @@ db.LearningSessionData learningSessionToData(LearningSession session) {
   );
 }
 
+// ─────────────────────────────────────────────
 // Statistics converters
+// ─────────────────────────────────────────────
+
 StatisticsModel statisticsFromData(db.StatisticsData data) {
   return StatisticsModel(
     id: data.id,
     date: data.date,
-    cardsLearned: data.cardsLearned, // Модель має дефолт 0, тож прийме і не-nullable
+    cardsLearned: data.cardsLearned,
     cardsReviewed: data.cardsReviewed,
     testsTaken: data.testsTaken,
     averageScore: data.averageScore,
@@ -309,7 +377,10 @@ db.StatisticsData statisticsToData(StatisticsModel stats) {
   );
 }
 
+// ─────────────────────────────────────────────
 // TestModel converters
+// ─────────────────────────────────────────────
+
 TestModel testFromData(db.TestData data) {
   return TestModel(
     id: data.id,
@@ -334,7 +405,10 @@ db.TestData testToData(TestModel test) {
   );
 }
 
+// ─────────────────────────────────────────────
 // UserProfile converters
+// ─────────────────────────────────────────────
+
 UserProfile userProfileFromData(db.UserProfileData data) {
   return UserProfile(
     id: data.id,
@@ -363,10 +437,12 @@ db.UserProfileData userProfileToData(UserProfile profile) {
   );
 }
 
+// ─────────────────────────────────────────────
 // XP History converters
+// ─────────────────────────────────────────────
+
 XpHistoryEntry xpHistoryFromData(db.XpHistoryEntryData data) {
   return XpHistoryEntry(
-    // ❌ В XpHistoryEntry НЕМАЄ id!
     amount: data.amount,
     source: data.source,
     timestamp: data.timestamp,
@@ -377,7 +453,6 @@ XpHistoryEntry xpHistoryFromData(db.XpHistoryEntryData data) {
 db.XpHistoryEntryData xpHistoryToData(XpHistoryEntry entry) {
   return db.XpHistoryEntryData(
     id: 0,
-    // ❌ В XpHistoryEntry НЕМАЄ id! А в Drift таблиці є autoIncrement, тому id генерується при insert
     amount: entry.amount,
     source: entry.source,
     timestamp: entry.timestamp,
@@ -385,10 +460,12 @@ db.XpHistoryEntryData xpHistoryToData(XpHistoryEntry entry) {
   );
 }
 
+// ─────────────────────────────────────────────
 // StreakData converters
+// ─────────────────────────────────────────────
+
 StreakData streakDataFromData(db.StreakDataData data) {
   return StreakData(
-    // ❌ В StreakData НЕМАЄ id!
     currentStreak: data.currentStreak,
     longestStreak: data.longestStreak,
     lastStudyDate: data.lastStudyDate,
@@ -401,7 +478,6 @@ StreakData streakDataFromData(db.StreakDataData data) {
 db.StreakDataData streakDataToData(StreakData streak) {
   return db.StreakDataData(
     id: 0,
-    // ❌ В StreakData НЕМАЄ id! А в Drift таблиці є autoIncrement, тому id генерується при insert
     currentStreak: streak.currentStreak,
     longestStreak: streak.longestStreak,
     lastStudyDate: streak.lastStudyDate,

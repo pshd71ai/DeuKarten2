@@ -1,8 +1,9 @@
 import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 part 'drift_database.g.dart';
 
@@ -20,21 +21,20 @@ class WordCards extends Table {
   TextColumn get level => text()(); // Stored as string for DifficultyLevel enum
   TextColumn get type => text()(); // Stored as string for CardType enum
   TextColumn get tags => text()(); // Stored as JSON string
-  TextColumn get deckId => text().references(Decks, #id, onDelete: KeyAction.cascade)();
+  TextColumn get deckId =>
+      text().references(Decks, #id, onDelete: KeyAction.cascade)();
   DateTimeColumn get lastReviewed => dateTime().nullable()();
   DateTimeColumn get nextReview => dateTime().nullable()();
   IntColumn get intervalDays => integer().nullable()();
-  IntColumn get repetitionCount => integer().withDefault(const Constant(0))();
+  IntColumn get repetitionCount =>
+      integer().withDefault(const Constant(0))();
   RealColumn get easeFactor => real().withDefault(const Constant(2.5))();
 
   @override
   Set<Column> get primaryKey => {id};
 
-  @override
-  List<Set<Column>> get uniqueKeys => [{deckId}];
-
-  @override
-  Set<Column>? get indices => {deckId};
+ // @override
+ // List<Set<Column>> get uniqueKeys => [{deckId}];
 }
 
 // Article Cards Table
@@ -47,13 +47,11 @@ class ArticleCards extends Table {
   TextColumn get translation => text()();
   TextColumn get exampleSentence => text()();
   TextColumn get level => text()();
-  TextColumn get wordCardId => text().references(WordCards, #id, onDelete: KeyAction.cascade)();
+  TextColumn get wordCardId =>
+      text().references(WordCards, #id, onDelete: KeyAction.cascade)();
 
   @override
   Set<Column> get primaryKey => {id};
-
-  @override
-  Set<Column>? get indices => {wordCardId};
 }
 
 // Sentence Cards Table
@@ -67,13 +65,11 @@ class SentenceCards extends Table {
   TextColumn get translation => text()();
   TextColumn get level => text()();
   TextColumn get grammarTopic => text()();
-  TextColumn get deckId => text().references(Decks, #id, onDelete: KeyAction.cascade)();
+  TextColumn get deckId =>
+      text().references(Decks, #id, onDelete: KeyAction.cascade)();
 
   @override
   Set<Column> get primaryKey => {id};
-
-  @override
-  Set<Column>? get indices => {deckId};
 }
 
 // Decks Table
@@ -105,7 +101,8 @@ class LearningSessions extends Table {
   DateTimeColumn get completedAt => dateTime().nullable()();
   TextColumn get cards => text()(); // Stored as JSON string of SessionCard
   IntColumn get cardsStudied => integer().withDefault(const Constant(0))();
-  IntColumn get correctAnswers => integer().withDefault(const Constant(0))();
+  IntColumn get correctAnswers =>
+      integer().withDefault(const Constant(0))();
   IntColumn get xpEarned => integer().withDefault(const Constant(0))();
   TextColumn get status => text()(); // Stored as string for SessionStatus enum
 
@@ -147,7 +144,8 @@ class StreakData extends Table {
   DateTimeColumn get lastStudyDate => dateTime()();
   BoolColumn get studiedToday => boolean()();
   TextColumn get studyDates => text()(); // Stored as JSON string
-  TextColumn get lastMilestone => text().nullable()(); // Stored as string for StreakMilestone enum
+  TextColumn get lastMilestone =>
+      text().nullable()(); // Stored as string for StreakMilestone enum
 }
 
 // Tests Table
@@ -175,7 +173,8 @@ class TestSessions extends Table {
   DateTimeColumn get startTime => dateTime().nullable()();
   IntColumn get timeLeft => integer().nullable()();
   IntColumn get timeElapsed => integer().nullable()();
-  BoolColumn get isComplete => boolean().withDefault(const Constant(false))();
+  BoolColumn get isComplete =>
+      boolean().withDefault(const Constant(false))();
   DateTimeColumn get completedAt => dateTime().nullable()();
   IntColumn get score => integer().nullable()();
   BoolColumn get isPassed => boolean().nullable()();
@@ -193,33 +192,37 @@ class Statistics extends Table {
   IntColumn get cardsReviewed => integer().withDefault(const Constant(0))();
   IntColumn get testsTaken => integer().withDefault(const Constant(0))();
   RealColumn get averageScore => real().withDefault(const Constant(0.0))();
-  IntColumn get studyTimeMinutes => integer().withDefault(const Constant(0))();
+  IntColumn get studyTimeMinutes =>
+      integer().withDefault(const Constant(0))();
   IntColumn get xpEarned => integer().withDefault(const Constant(0))();
-  IntColumn get retentionCards => integer().withDefault(const Constant(0))();
+  IntColumn get retentionCards =>
+      integer().withDefault(const Constant(0))();
 
   @override
   Set<Column> get primaryKey => {id};
 }
 
 // Main Database Class
-@DriftDatabase(tables: [
-  WordCards,
-  ArticleCards,
-  SentenceCards,
-  Decks,
-  LearningSessions,
-  UserProfiles,
-  XpHistory,
-  StreakData,
-  Tests,
-  TestSessions,
-  Statistics,
-])
+@DriftDatabase(
+  tables: [
+    WordCards,
+    ArticleCards,
+    SentenceCards,
+    Decks,
+    LearningSessions,
+    UserProfiles,
+    XpHistory,
+    StreakData,
+    Tests,
+    TestSessions,
+    Statistics,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase(QueryExecutor e) : super(e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration {
@@ -227,18 +230,11 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
       },
-      onUpgrade: (Migrator m, int from, int to) async {
-        if (from == 1 && to == 2) {
-          // Add deckId to WordCards
-          await m.addColumn(wordCards, wordCards.deckId);
-          
-          // Add wordCardId to ArticleCards
-          await m.addColumn(articleCards, articleCards.wordCardId);
-          
-          // Add deckId to SentenceCards
-          await m.addColumn(sentenceCards, sentenceCards.deckId);
-        }
-      },
+     // onUpgrade: (Migrator m, int from, int to) async {
+        // During development, database schema changes are handled
+        // by reinstalling the app / clearing app data.
+        // This avoids fragile incremental migrations while schema evolves.
+     // },
     );
   }
 
@@ -261,14 +257,12 @@ class AppDatabase extends _$AppDatabase {
 
     _instance = AppDatabase(NativeDatabase.createInBackground(file));
 
-    // Форсуємо реальне відкриття/створення
+    // Force actual open / creation
     await _instance!.customSelect('SELECT 1').get();
 
     print('DB EXISTS AFTER OPEN: ${await file.exists()}');
     print('DB INITIALIZED');
   }
-
-  // Convenience methods for common operations
 
   // Word Cards
   Future<List<WordCardData>> getAllWordCards() {
@@ -382,17 +376,20 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<List<SentenceCardData>> getSentenceCardsByDeck(String deckId) {
-    final query = select(sentenceCards)..where((tbl) => tbl.deckId.equals(deckId));
+    final query =
+    select(sentenceCards)..where((tbl) => tbl.deckId.equals(deckId));
     return query.get();
   }
 
   Stream<List<SentenceCardData>> watchSentenceCardsByDeck(String deckId) {
-    final query = select(sentenceCards)..where((tbl) => tbl.deckId.equals(deckId));
+    final query =
+    select(sentenceCards)..where((tbl) => tbl.deckId.equals(deckId));
     return query.watch();
   }
 
   Future<List<ArticleCardData>> getArticleCardsByWordCard(String wordCardId) {
-    final query = select(articleCards)..where((tbl) => tbl.wordCardId.equals(wordCardId));
+    final query = select(articleCards)
+      ..where((tbl) => tbl.wordCardId.equals(wordCardId));
     return query.get();
   }
 }

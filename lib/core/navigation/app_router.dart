@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../features/auth/welcome_login_screen.dart';
+import '../../features/ki_teacher/screens/ki_teacher_screen.dart';
+import '../../features/tests/screens/test_question_screen.dart';
+import '../../features/tests/screens/test_result_screen.dart' as test_result;
 import '../../screens/home/home_screen.dart';
 import '../../screens/karten/karten_screen.dart';
 import '../../screens/karten/learning_session_screen.dart';
 import '../../screens/karten/session_result_screen.dart';
-import '../../screens/tests/tests_screen.dart';
-import '../../screens/tests/test_detail_screen.dart';
-import '../../features/tests/screens/test_question_screen.dart';
-import '../../features/tests/screens/test_result_screen.dart' as test_result;
-import '../../screens/statistik/statistik_screen.dart';
 import '../../screens/profil/profil_screen.dart';
-import '../../features/ki_teacher/screens/ki_teacher_screen.dart';
+import '../../screens/statistik/statistik_screen.dart';
+import '../../screens/tests/test_detail_screen.dart';
+import '../../screens/tests/tests_screen.dart';
 import 'scaffold_with_nav_bar.dart';
 
 part 'app_router.g.dart';
@@ -22,9 +23,15 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 @riverpod
 GoRouter appRouter(AppRouterRef ref) {
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/welcome',
     navigatorKey: _rootNavigatorKey,
     routes: [
+      GoRoute(
+        path: '/welcome',
+        name: 'welcome',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const WelcomeLoginScreen(),
+      ),
       ShellRoute(
         builder: (context, state, child) => ScaffoldWithNavBar(child: child),
         routes: [
